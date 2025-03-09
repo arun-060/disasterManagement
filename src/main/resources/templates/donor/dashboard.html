@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Dashboard - Disaster Relief Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #343a40;
+            color: white;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+        }
+        .sidebar .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar .nav-link.active {
+            color: white;
+            background-color: #007bff;
+        }
+        .dashboard-card {
+            border-radius: 10px;
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        .disaster-card {
+            transition: transform 0.3s;
+        }
+        .disaster-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="fas fa-hands-helping me-2"></i>
+                Disaster Relief Platform
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> <span sec:authentication="name">Username</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                                <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-donate me-2"></i>
+                                Make Donation
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-history me-2"></i>
+                                Donation History
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Active Disasters
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-chart-pie me-2"></i>
+                                Impact Reports
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-user me-2"></i>
+                                Profile
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="fas fa-tachometer-alt me-2"></i>Donor Dashboard</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a href="#" class="btn btn-primary">
+                            <i class="fas fa-donate me-2"></i>Make a Donation
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Dashboard Overview -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card dashboard-card text-white bg-primary">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="card-title">Total Donations</h6>
+                                        <h2 class="mb-0">$1,250</h2>
+                                    </div>
+                                    <i class="fas fa-donate fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card dashboard-card text-white bg-success">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="card-title">Disasters Supported</h6>
+                                        <h2 class="mb-0">5</h2>
+                                    </div>
+                                    <i class="fas fa-hands-helping fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card dashboard-card text-white bg-info">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="card-title">People Helped</h6>
+                                        <h2 class="mb-0">250+</h2>
+                                    </div>
+                                    <i class="fas fa-users fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Disasters -->
+                <h3 class="mb-3">Active Disasters Needing Support</h3>
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                        <div class="card disaster-card h-100">
+                            <img src="https://via.placeholder.com/300x150?text=Flood" class="card-img-top" alt="Flood">
+                            <div class="card-body">
+                                <h5 class="card-title">Flood Relief - Southeast Asia</h5>
+                                <div class="progress mb-3">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
+                                </div>
+                                <p class="card-text">$75,000 raised of $100,000 goal</p>
+                                <p class="card-text"><small class="text-muted">Urgent need for clean water and medical supplies</small></p>
+                                <a href="#" class="btn btn-primary">Donate Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card disaster-card h-100">
+                            <img src="https://via.placeholder.com/300x150?text=Earthquake" class="card-img-top" alt="Earthquake">
+                            <div class="card-body">
+                                <h5 class="card-title">Earthquake Response - Central America</h5>
+                                <div class="progress mb-3">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 45%;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">45%</div>
+                                </div>
+                                <p class="card-text">$45,000 raised of $100,000 goal</p>
+                                <p class="card-text"><small class="text-muted">Need for shelter and reconstruction assistance</small></p>
+                                <a href="#" class="btn btn-primary">Donate Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card disaster-card h-100">
+                            <img src="https://via.placeholder.com/300x150?text=Wildfire" class="card-img-top" alt="Wildfire">
+                            <div class="card-body">
+                                <h5 class="card-title">Wildfire Recovery - Western Region</h5>
+                                <div class="progress mb-3">
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                </div>
+                                <p class="card-text">$25,000 raised of $100,000 goal</p>
+                                <p class="card-text"><small class="text-muted">Support needed for displaced families</small></p>
+                                <a href="#" class="btn btn-primary">Donate Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Donations -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-history me-1"></i>
+                        Your Recent Donations
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Disaster</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Impact</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2023-06-10</td>
+                                        <td>Flood Relief - Southeast Asia</td>
+                                        <td>$500</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                        <td><a href="#" class="btn btn-sm btn-outline-primary">View Impact</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-05-22</td>
+                                        <td>Hurricane Recovery Fund</td>
+                                        <td>$250</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                        <td><a href="#" class="btn btn-sm btn-outline-primary">View Impact</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-04-15</td>
+                                        <td>Earthquake Response - Central America</td>
+                                        <td>$300</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                        <td><a href="#" class="btn btn-sm btn-outline-primary">View Impact</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-03-05</td>
+                                        <td>Drought Relief Initiative</td>
+                                        <td>$200</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                        <td><a href="#" class="btn btn-sm btn-outline-primary">View Impact</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <footer class="pt-3 mt-4 text-muted border-top">
+                    <p>&copy; 2023 Disaster Relief Platform. All rights reserved.</p>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:src="@{/js/scripts.js}"></script>
+    <script th:src="@{/js/auth.js}"></script>
+</body>
+</html> 

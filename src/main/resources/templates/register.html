@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Disaster Relief Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .register-container {
+            max-width: 600px;
+            margin: 50px auto;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            border-radius: 10px 10px 0 0 !important;
+            padding: 20px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            width: 100%;
+            padding: 10px;
+        }
+        .form-control {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container register-container">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-user-plus me-2"></i>Register</h3>
+                <p class="mb-0">Create your Disaster Relief account</p>
+            </div>
+            <div class="card-body p-4">
+                <div id="alertMessage" class="alert alert-danger d-none"></div>
+                <div id="successMessage" class="alert alert-success d-none">Registration successful! Redirecting to login...</div>
+                
+                <form id="registerForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <small class="text-muted">Must be 3-50 characters long</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <small class="text-muted">Must be at least 6 characters long</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">Full Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                            <input type="text" class="form-control" id="fullName" name="fullName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="role" class="form-label">Register as</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                <select class="form-select" id="role" name="role" required>
+                                    <option value="" selected disabled>Select your role</option>
+                                    <option value="DONOR">Donor</option>
+                                    <option value="AFFECTED_PERSON">Affected Person</option>
+                                    <option value="VOLUNTEER">Volunteer</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="termsCheck" required>
+                        <label class="form-check-label" for="termsCheck">I agree to the terms and conditions</label>
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary" onclick="register()">Register</button>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p>Already have an account? <a th:href="@{/login}">Login here</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <a th:href="@{/}" class="text-decoration-none"><i class="fas fa-arrow-left me-1"></i> Back to Home</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function register() {
+            // Validate form
+            const form = document.getElementById('registerForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            // Validate password match
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (password !== confirmPassword) {
+                showAlert('Passwords do not match');
+                return;
+            }
+            
+            // Get form data
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const fullName = document.getElementById('fullName').value;
+            const role = document.getElementById('role').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            
+            // Send registration request
+            fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password,
+                    fullName: fullName,
+                    role: role,
+                    phoneNumber: phoneNumber
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.message || 'Registration failed');
+                    });
+                }
+            })
+            .then(data => {
+                // Show success message
+                document.getElementById('successMessage').classList.remove('d-none');
+                document.getElementById('alertMessage').classList.add('d-none');
+                
+                // Redirect to login page after 2 seconds
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 2000);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAlert(error.message);
+            });
+        }
+        
+        function showAlert(message) {
+            const alertElement = document.getElementById('alertMessage');
+            alertElement.textContent = message;
+            alertElement.classList.remove('d-none');
+            document.getElementById('successMessage').classList.add('d-none');
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/base :: head}">
+    <title>Home - Disaster Relief Platform</title>
+</head>
+<body>
+    <div th:replace="~{layout/base :: nav}"></div>
+
+    <!-- Hero Section -->
+    <section class="bg-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold">Crowdsourced Disaster Relief Platform</h1>
+                    <p class="lead">Connecting those in need with those who can help during disasters.</p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                        <a th:href="@{/register}" class="btn btn-light btn-lg px-4 me-md-2">Get Started</a>
+                        <a th:href="@{/login}" class="btn btn-outline-light btn-lg px-4">Login</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block">
+                    <img src="https://via.placeholder.com/600x400?text=Disaster+Relief" alt="Disaster Relief" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">About Our Platform</h2>
+                <p class="lead text-muted">Coordinating relief efforts through technology</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-hands-helping fa-3x text-primary mb-3"></i>
+                            <h3 class="card-title">Donors</h3>
+                            <p class="card-text">Contribute resources, funds, or supplies to help those affected by disasters.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-user-shield fa-3x text-primary mb-3"></i>
+                            <h3 class="card-title">Affected People</h3>
+                            <p class="card-text">Request assistance and specify your needs during disaster situations.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-people-carry fa-3x text-primary mb-3"></i>
+                            <h3 class="card-title">Volunteers</h3>
+                            <p class="card-text">Offer your time and skills to help with disaster relief efforts.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">How It Works</h2>
+                <p class="lead text-muted">Our platform connects people in need with those who can help</p>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <span class="fs-4">1</span>
+                        </div>
+                        <h4>Register</h4>
+                        <p>Create an account as a donor, volunteer, or affected person.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <span class="fs-4">2</span>
+                        </div>
+                        <h4>Connect</h4>
+                        <p>Find resources or people in need based on location and requirements.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <span class="fs-4">3</span>
+                        </div>
+                        <h4>Coordinate</h4>
+                        <p>Organize relief efforts efficiently through our platform.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <span class="fs-4">4</span>
+                        </div>
+                        <h4>Help</h4>
+                        <p>Provide or receive assistance during disaster situations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container text-center">
+            <h2 class="fw-bold mb-3">Ready to Make a Difference?</h2>
+            <p class="lead mb-4">Join our platform today and be part of the solution during disasters.</p>
+            <a th:href="@{/register}" class="btn btn-light btn-lg px-4 me-md-2">Register Now</a>
+        </div>
+    </section>
+
+    <div th:replace="~{layout/base :: footer}"></div>
+</body>
+</html> 

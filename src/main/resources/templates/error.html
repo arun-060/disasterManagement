@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/base :: head}">
+    <title>Error - Disaster Relief Platform</title>
+</head>
+<body>
+    <div th:replace="~{layout/base :: nav}"></div>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body p-5">
+                        <div class="mb-4">
+                            <i class="fas fa-exclamation-triangle text-danger" style="font-size: 4rem;"></i>
+                        </div>
+                        <h1 class="display-4 mb-4">Oops! Something went wrong</h1>
+                        <p class="lead mb-4">We're sorry, but there was an error processing your request.</p>
+                        <div class="alert alert-danger" th:if="${errorMessage}">
+                            <p th:text="${errorMessage}">Error details will be shown here</p>
+                        </div>
+                        <div class="mt-4">
+                            <a th:href="@{/}" class="btn btn-primary btn-lg">Return to Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{layout/base :: footer}"></div>
+</body>
+</html> 
