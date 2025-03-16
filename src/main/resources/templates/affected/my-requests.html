@@ -10,14 +10,14 @@
     <style>
         .navbar {
             z-index: 1030;
-            height: 60px;
+            height: 56px;
         }
         .sidebar {
-            min-height: calc(100vh - 60px);
+            min-height: calc(100vh - 56px);
             background-color: #343a40;
             color: white;
             position: fixed;
-            top: 60px;
+            top: 56px;
             bottom: 0;
             left: 0;
             z-index: 100;
@@ -38,39 +38,25 @@
         }
         main {
             margin-left: 16.67%;
-            padding-top: 80px !important;
+            padding-top: 56px;
         }
-        .content-header {
-            margin-bottom: 2rem;
+        .request-card {
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        .request-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
         }
         @media (max-width: 768px) {
             main {
                 margin-left: 0;
-                padding-top: 80px !important;
             }
             .sidebar {
                 position: static;
                 width: 100%;
             }
-        }
-        .dashboard-card {
-            border-radius: 10px;
-            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-        }
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-        }
-        .status-badge {
-            font-size: 0.85rem;
-            padding: 0.35rem 0.65rem;
-        }
-        .request-card {
-            transition: all 0.3s ease;
-        }
-        .request-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
         }
     </style>
 </head>
@@ -78,7 +64,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" th:href="@{/}">
+            <a class="navbar-brand" href="#">
                 <i class="fas fa-hands-helping me-2"></i>
                 Disaster Relief Platform
             </a>
@@ -96,10 +82,10 @@
                             <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">
+                                <form th:action="@{/logout}" method="post" style="display: none;" id="logoutForm"></form>
+                                <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit();">
                                     <i class="fas fa-sign-out-alt me-2"></i>Logout
                                 </a>
-                                <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
                             </li>
                         </ul>
                     </li>
@@ -110,7 +96,7 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="position-sticky pt-3">
+        <div class="position-sticky">
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/affected/dashboard}">
@@ -131,12 +117,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/affected/relief-centers}">
-                        <i class="fas fa-map-marker-alt me-2"></i>
-                        Relief Centers
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" th:href="@{/affected/alerts}">
                         <i class="fas fa-bell me-2"></i>
                         Alerts
@@ -144,7 +124,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/affected/community}">
-                        <i class="fas fa-comments me-2"></i>
+                        <i class="fas fa-users me-2"></i>
                         Community Support
                     </a>
                 </li>
@@ -159,21 +139,18 @@
     </div>
 
     <!-- Main Content -->
-    <main class="px-md-4 py-4">
-        <div class="content-header">
-            <h2>My Requests</h2>
-            <p class="text-muted">Track and manage your assistance requests</p>
-        </div>
-
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <div class="btn-toolbar mb-2 mb-md-0">
-                <a th:href="@{/affected/request-assistance}" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i>New Request
-                </a>
+    <main class="px-md-4">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">My Requests</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>New Request
+                    </button>
+                </div>
             </div>
-        </div>
 
-        <!-- Request Status Cards -->
+            <!-- Request Status Cards -->
         <div class="row mb-4">
             <div class="col-md-3 col-sm-6 mb-3">
                 <div class="card dashboard-card bg-primary text-white">

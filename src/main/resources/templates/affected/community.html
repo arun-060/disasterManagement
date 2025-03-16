@@ -10,14 +10,14 @@
     <style>
         .navbar {
             z-index: 1030;
-            height: 60px;
+            height: 56px;
         }
         .sidebar {
-            min-height: calc(100vh - 60px);
+            min-height: calc(100vh - 56px);
             background-color: #343a40;
             color: white;
             position: fixed;
-            top: 60px;
+            top: 56px;
             bottom: 0;
             left: 0;
             z-index: 100;
@@ -38,10 +38,7 @@
         }
         main {
             margin-left: 16.67%;
-            padding-top: 80px !important;
-        }
-        .content-header {
-            margin-bottom: 2rem;
+            padding-top: 56px;
         }
         .community-stats {
             background: linear-gradient(to right, #007bff, #0056b3);
@@ -57,11 +54,11 @@
         }
         .post-card:hover {
             transform: translateY(-3px);
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
         }
         @media (max-width: 768px) {
             main {
                 margin-left: 0;
-                padding-top: 80px !important;
             }
             .sidebar {
                 position: static;
@@ -74,7 +71,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" th:href="@{/}">
+            <a class="navbar-brand" href="#">
                 <i class="fas fa-hands-helping me-2"></i>
                 Disaster Relief Platform
             </a>
@@ -92,10 +89,10 @@
                             <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">
+                                <form th:action="@{/logout}" method="post" style="display: none;" id="logoutForm"></form>
+                                <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit();">
                                     <i class="fas fa-sign-out-alt me-2"></i>Logout
                                 </a>
-                                <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
                             </li>
                         </ul>
                     </li>
@@ -106,7 +103,7 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="position-sticky pt-3">
+        <div class="position-sticky">
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/affected/dashboard}">
@@ -127,12 +124,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/affected/relief-centers}">
-                        <i class="fas fa-map-marker-alt me-2"></i>
-                        Relief Centers
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" th:href="@{/affected/alerts}">
                         <i class="fas fa-bell me-2"></i>
                         Alerts
@@ -140,7 +131,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" th:href="@{/affected/community}">
-                        <i class="fas fa-comments me-2"></i>
+                        <i class="fas fa-users me-2"></i>
                         Community Support
                     </a>
                 </li>
@@ -155,101 +146,107 @@
     </div>
 
     <!-- Main Content -->
-    <main class="px-md-4 py-4">
-        <div class="content-header">
-            <h2>Community Support</h2>
-            <p class="text-muted">Connect with your community and share resources</p>
-        </div>
-
-        <!-- Community Statistics -->
-        <div class="community-stats">
-            <div class="row text-center">
-                <div class="col-md-4">
-                    <h3>1,234</h3>
-                    <p class="mb-0">Community Members</p>
-                </div>
-                <div class="col-md-4">
-                    <h3>56</h3>
-                    <p class="mb-0">Active Discussions</p>
-                </div>
-                <div class="col-md-4">
-                    <h3>789</h3>
-                    <p class="mb-0">Resources Shared</p>
+    <main class="px-md-4">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Community Support</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Create Post
+                    </button>
                 </div>
             </div>
-        </div>
 
-        <!-- Create New Post -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Create New Post</h5>
-                <form>
-                    <div class="mb-3">
-                        <textarea class="form-control" rows="3" placeholder="Share your thoughts, questions, or resources..."></textarea>
+            <!-- Community Statistics -->
+            <div class="community-stats mb-4">
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <h3>1,234</h3>
+                        <p class="mb-0">Community Members</p>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <button type="button" class="btn btn-outline-primary me-2">
-                                <i class="fas fa-image me-1"></i> Add Photo
-                            </button>
-                            <button type="button" class="btn btn-outline-primary">
-                                <i class="fas fa-paperclip me-1"></i> Attach
-                            </button>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Post</button>
+                    <div class="col-md-4">
+                        <h3>56</h3>
+                        <p class="mb-0">Active Discussions</p>
                     </div>
-                </form>
+                    <div class="col-md-4">
+                        <h3>789</h3>
+                        <p class="mb-0">Resources Shared</p>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <!-- Posts Feed -->
-        <div class="posts-feed">
-            <!-- Sample Post 1 -->
-            <div class="card post-card">
+            <!-- Create New Post -->
+            <div class="card mb-4">
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User Avatar">
-                        <div>
-                            <h6 class="mb-0">Jane Smith</h6>
-                            <small class="text-muted">Posted 2 hours ago</small>
+                    <h5 class="card-title">Create New Post</h5>
+                    <form>
+                        <div class="mb-3">
+                            <textarea class="form-control" rows="3" placeholder="Share your thoughts, questions, or resources..."></textarea>
                         </div>
-                    </div>
-                    <p class="card-text">Sharing information about available shelter spaces at the Community Center. Currently 20 spots available. Contact: (555) 123-4567</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <button class="btn btn-sm btn-outline-primary me-2">
-                                <i class="fas fa-heart me-1"></i> Like
-                            </button>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-comment me-1"></i> Comment
-                            </button>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <button type="button" class="btn btn-outline-primary me-2">
+                                    <i class="fas fa-image me-1"></i> Add Photo
+                                </button>
+                                <button type="button" class="btn btn-outline-primary">
+                                    <i class="fas fa-paperclip me-1"></i> Attach
+                                </button>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Post</button>
                         </div>
-                        <small class="text-muted">15 likes · 3 comments</small>
-                    </div>
+                    </form>
                 </div>
             </div>
 
-            <!-- Sample Post 2 -->
-            <div class="card post-card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User Avatar">
-                        <div>
-                            <h6 class="mb-0">John Doe</h6>
-                            <small class="text-muted">Posted 4 hours ago</small>
+            <!-- Posts Feed -->
+            <div class="posts-feed">
+                <!-- Sample Post 1 -->
+                <div class="card post-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User Avatar">
+                            <div>
+                                <h6 class="mb-0">Jane Smith</h6>
+                                <small class="text-muted">Posted 2 hours ago</small>
+                            </div>
+                        </div>
+                        <p class="card-text">Sharing information about available shelter spaces at the Community Center. Currently 20 spots available. Contact: (555) 123-4567</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary me-2">
+                                    <i class="fas fa-heart me-1"></i> Like
+                                </button>
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-comment me-1"></i> Comment
+                                </button>
+                            </div>
+                            <small class="text-muted">15 likes · 3 comments</small>
                         </div>
                     </div>
-                    <p class="card-text">Looking for volunteers to help distribute supplies at the Main Street relief center tomorrow morning. Please comment if you can help!</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <button class="btn btn-sm btn-outline-primary me-2">
-                                <i class="fas fa-heart me-1"></i> Like
-                            </button>
-                            <button class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-comment me-1"></i> Comment
-                            </button>
+                </div>
+
+                <!-- Sample Post 2 -->
+                <div class="card post-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User Avatar">
+                            <div>
+                                <h6 class="mb-0">John Doe</h6>
+                                <small class="text-muted">Posted 4 hours ago</small>
+                            </div>
                         </div>
-                        <small class="text-muted">8 likes · 12 comments</small>
+                        <p class="card-text">Looking for volunteers to help distribute supplies at the Main Street relief center tomorrow morning. Please comment if you can help!</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary me-2">
+                                    <i class="fas fa-heart me-1"></i> Like
+                                </button>
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-comment me-1"></i> Comment
+                                </button>
+                            </div>
+                            <small class="text-muted">8 likes · 12 comments</small>
+                        </div>
                     </div>
                 </div>
             </div>

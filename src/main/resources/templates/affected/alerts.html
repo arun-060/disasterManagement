@@ -10,14 +10,14 @@
     <style>
         .navbar {
             z-index: 1030;
-            height: 60px;
+            height: 56px;
         }
         .sidebar {
-            min-height: calc(100vh - 60px);
+            min-height: calc(100vh - 56px);
             background-color: #343a40;
             color: white;
             position: fixed;
-            top: 60px;
+            top: 56px;
             bottom: 0;
             left: 0;
             z-index: 100;
@@ -38,14 +38,15 @@
         }
         main {
             margin-left: 16.67%;
-            padding-top: 80px !important;
-        }
-        .content-header {
-            margin-bottom: 2rem;
+            padding-top: 56px;
         }
         .alert-card {
             border-left: 4px solid;
             margin-bottom: 1rem;
+            transition: transform 0.2s;
+        }
+        .alert-card:hover {
+            transform: translateY(-3px);
         }
         .alert-card.high {
             border-left-color: #dc3545;
@@ -59,7 +60,6 @@
         @media (max-width: 768px) {
             main {
                 margin-left: 0;
-                padding-top: 80px !important;
             }
             .sidebar {
                 position: static;
@@ -72,7 +72,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" th:href="@{/}">
+            <a class="navbar-brand" href="#">
                 <i class="fas fa-hands-helping me-2"></i>
                 Disaster Relief Platform
             </a>
@@ -90,10 +90,10 @@
                             <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">
+                                <form th:action="@{/logout}" method="post" style="display: none;" id="logoutForm"></form>
+                                <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit();">
                                     <i class="fas fa-sign-out-alt me-2"></i>Logout
                                 </a>
-                                <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
                             </li>
                         </ul>
                     </li>
@@ -104,7 +104,7 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="position-sticky pt-3">
+        <div class="position-sticky">
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/affected/dashboard}">
@@ -125,12 +125,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/affected/relief-centers}">
-                        <i class="fas fa-map-marker-alt me-2"></i>
-                        Relief Centers
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link active" th:href="@{/affected/alerts}">
                         <i class="fas fa-bell me-2"></i>
                         Alerts
@@ -138,7 +132,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/affected/community}">
-                        <i class="fas fa-comments me-2"></i>
+                        <i class="fas fa-users me-2"></i>
                         Community Support
                     </a>
                 </li>
@@ -153,66 +147,83 @@
     </div>
 
     <!-- Main Content -->
-    <main class="px-md-4 py-4">
-        <div class="content-header">
-            <h2>Alerts & Notifications</h2>
-            <p class="text-muted">Stay informed about important updates and emergency alerts</p>
-        </div>
-
-        <!-- Active Alerts Section -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="alert-card high p-3 bg-light">
-                    <h5 class="text-danger"><i class="fas fa-exclamation-triangle me-2"></i>High Priority Alert</h5>
-                    <p class="mb-1">Flash flood warning in downtown area. Seek higher ground immediately.</p>
-                    <small class="text-muted">Posted 10 minutes ago</small>
-                </div>
-
-                <div class="alert-card medium p-3 bg-light">
-                    <h5 class="text-warning"><i class="fas fa-exclamation-circle me-2"></i>Medium Priority Alert</h5>
-                    <p class="mb-1">Heavy rainfall expected in the next 24 hours. Prepare accordingly.</p>
-                    <small class="text-muted">Posted 1 hour ago</small>
-                </div>
-
-                <div class="alert-card low p-3 bg-light">
-                    <h5 class="text-success"><i class="fas fa-info-circle me-2"></i>Information Update</h5>
-                    <p class="mb-1">New relief center opened at Central Community Center.</p>
-                    <small class="text-muted">Posted 2 hours ago</small>
+    <main class="px-md-4">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Alerts & Notifications</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-bell me-2"></i>Mark All as Read
+                    </button>
                 </div>
             </div>
-        </div>
 
-        <!-- Alert History Table -->
-        <div class="row">
-            <div class="col-12">
-                <h3 class="mb-3">Alert History</h3>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Type</th>
-                                <th>Message</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Sample table rows -->
-                            <tr>
-                                <td>2023-05-20</td>
-                                <td><span class="badge bg-danger">Emergency</span></td>
-                                <td>Evacuation order for coastal areas</td>
-                                <td>Active</td>
-                            </tr>
-                            <tr>
-                                <td>2023-05-19</td>
-                                <td><span class="badge bg-warning">Warning</span></td>
-                                <td>Severe weather approaching</td>
-                                <td>Expired</td>
-                            </tr>
-                            <!-- Add more rows as needed -->
-                        </tbody>
-                    </table>
+            <!-- Active Alerts -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="alert-card high p-3 bg-light">
+                        <h5 class="text-danger"><i class="fas fa-exclamation-triangle me-2"></i>High Priority Alert</h5>
+                        <p class="mb-1">Flash flood warning in downtown area. Seek higher ground immediately.</p>
+                        <small class="text-muted">Posted 10 minutes ago</small>
+                    </div>
+
+                    <div class="alert-card medium p-3 bg-light">
+                        <h5 class="text-warning"><i class="fas fa-exclamation-circle me-2"></i>Medium Priority Alert</h5>
+                        <p class="mb-1">Heavy rainfall expected in the next 24 hours. Prepare accordingly.</p>
+                        <small class="text-muted">Posted 1 hour ago</small>
+                    </div>
+
+                    <div class="alert-card low p-3 bg-light">
+                        <h5 class="text-success"><i class="fas fa-info-circle me-2"></i>Information Update</h5>
+                        <p class="mb-1">New relief center opened at Central Community Center.</p>
+                        <small class="text-muted">Posted 2 hours ago</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alert History -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Alert History</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Message</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2023-05-20</td>
+                                    <td><span class="badge bg-danger">Emergency</span></td>
+                                    <td>Evacuation order for coastal areas</td>
+                                    <td>Active</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2023-05-19</td>
+                                    <td><span class="badge bg-warning">Warning</span></td>
+                                    <td>Severe weather approaching</td>
+                                    <td>Expired</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
