@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relief Centers - Disaster Relief Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #343a40;
+            color: white;
+            position: fixed;
+            top: 56px;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 0;
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+        }
+        .sidebar .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar .nav-link.active {
+            color: white;
+            background-color: #007bff;
+        }
+        .dashboard-card {
+            border-radius: 10px;
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        .resource-card {
+            transition: all 0.3s;
+        }
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        main {
+            margin-left: 16.67%; /* Corresponds to col-md-2 */
+        }
+        @media (max-width: 768px) {
+            main {
+                margin-left: 0;
+            }
+            .sidebar {
+                position: static;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="fas fa-hands-helping me-2"></i>
+                Disaster Relief Platform
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> <span sec:authentication="name">Username</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" th:href="@{/affected/profile}"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                                <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar col-md-2 col-lg-2">
+        <div class="position-sticky pt-3">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/affected/dashboard}">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/affected/request-assistance}">
+                        <i class="fas fa-hand-holding-heart me-2"></i>
+                        Request Assistance
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/affected/my-requests}">
+                        <i class="fas fa-clipboard-list me-2"></i>
+                        My Requests
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/affected/relief-centers}">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        Relief Centers
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/affected/alerts}">
+                        <i class="fas fa-bell me-2"></i>
+                        Alerts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/affected/community}">
+                        <i class="fas fa-comments me-2"></i>
+                        Community Support
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/affected/profile}">
+                        <i class="fas fa-user me-2"></i>
+                        Profile
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="px-md-4 py-4" style="margin-top: 56px;">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2"><i class="fas fa-map-marker-alt me-2"></i>Relief Centers</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <button class="btn btn-primary me-2">
+                    <i class="fas fa-location-arrow me-2"></i>Find Nearest Center
+                </button>
+            </div>
+        </div>
+
+        <!-- Map View -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-map me-2"></i>Relief Centers Map</h5>
+            </div>
+            <div class="card-body">
+                <div id="map" style="height: 400px; width: 100%; border-radius: 8px;"></div>
+            </div>
+        </div>
+
+        <!-- Relief Centers List -->
+        <div class="row">
+            <!-- Center 1 -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">Central Community Center</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <p><i class="fas fa-map-marker-alt me-2"></i><strong>Location:</strong></p>
+                            <p class="ms-4">123 Main Street, City</p>
+                        </div>
+                        <div class="mb-3">
+                            <p><i class="fas fa-clock me-2"></i><strong>Operating Hours:</strong></p>
+                            <p class="ms-4">24/7</p>
+                        </div>
+                        <div class="mb-3">
+                            <p><i class="fas fa-phone me-2"></i><strong>Contact:</strong></p>
+                            <p class="ms-4">(555) 123-4567</p>
+                        </div>
+                        <div class="mb-3">
+                            <p><i class="fas fa-box-open me-2"></i><strong>Available Resources:</strong></p>
+                            <ul class="ms-4">
+                                <li>Food & Water</li>
+                                <li>Medical Supplies</li>
+                                <li>Temporary Shelter</li>
+                                <li>Clothing</li>
+                            </ul>
+                        </div>
+                        <div class="mb-3">
+                            <p><i class="fas fa-user-md me-2"></i><strong>Services:</strong></p>
+                            <ul class="ms-4">
+                                <li>Medical Assistance</li>
+                                <li>Mental Health Support</li>
+                                <li>Child Care</li>
+                            </ul>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-directions me-2"></i>Get Directions
+                            </button>
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#centerDetailsModal">
+                                <i class="fas fa-info-circle me-2"></i>More Details
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <i class="fas fa-users me-2"></i>Current Capacity: 75%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center 2 -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">East Side Medical Station</h5>
+                    </div>
+                    <!-- Similar structure as Center 1 -->
+                </div>
+            </div>
+
+            <!-- Center 3 -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="card-title mb-0">North High School Shelter</h5>
+                    </div>
+                    <!-- Similar structure as Center 1 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Center Details Modal -->
+        <div class="modal fade" id="centerDetailsModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Central Community Center Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Detailed information about the center -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-info-circle me-2"></i>About</h6>
+                                <p>Detailed description of the center and its facilities...</p>
+                                
+                                <h6><i class="fas fa-clock me-2"></i>Schedule</h6>
+                                <ul class="list-unstyled">
+                                    <li>Monday - Friday: 24 hours</li>
+                                    <li>Saturday - Sunday: 24 hours</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-chart-bar me-2"></i>Current Status</h6>
+                                <ul class="list-unstyled">
+                                    <li>Available Beds: 45/60</li>
+                                    <li>Medical Staff: Available</li>
+                                    <li>Food Supply: Adequate</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Get Directions</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="pt-3 mt-4 text-muted border-top">
+            <p>&copy; 2023 Disaster Relief Platform. All rights reserved.</p>
+        </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:src="@{/js/scripts.js}"></script>
+</body>
+</html> 

@@ -7,23 +7,32 @@
     <div th:replace="~{layout/base :: nav}"></div>
 
     <!-- Hero Section -->
-    <section class="bg-primary text-white py-5">
-        <div class="container">
+    <section class="position-relative text-white d-flex align-items-center vh-100">
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-primary">
+            <img src="https://images.unsplash.com/photo-1587502537815-0c8b5c9ba39a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" 
+                 class="w-100 h-100 object-fit-cover" alt="Disaster Relief">
+            <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50 "></div>
+        </div>
+        
+        <div class="container position-relative z-2">
             <div class="row align-items-center">
                 <div class="col-lg-6">
                     <h1 class="display-4 fw-bold">Crowdsourced Disaster Relief Platform</h1>
                     <p class="lead">Connecting those in need with those who can help during disasters.</p>
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                        <a th:href="@{/register}" class="btn btn-light btn-lg px-4 me-md-2">Get Started</a>
-                        <a th:href="@{/login}" class="btn btn-outline-light btn-lg px-4">Login</a>
+                    <div class="mt-4 d-grid gap-3 d-md-flex">
+                        <a th:href="@{/register}" class="btn btn-light btn-lg px-4 me-md-2">
+                            <i class="fas fa-user-plus me-2"></i> Get Started
+                        </a>
+                        <a th:href="@{/login}" class="btn btn-outline-light btn-lg px-4">
+                            <i class="fas fa-sign-in-alt me-2"></i> Login
+                        </a>
                     </div>
-                </div>
-                <div class="col-lg-6 d-none d-lg-block">
-                    <img src="https://via.placeholder.com/600x400?text=Disaster+Relief" alt="Disaster Relief" class="img-fluid rounded shadow">
                 </div>
             </div>
         </div>
     </section>
+    
+    
 
     <!-- About Section -->
     <section class="py-5">

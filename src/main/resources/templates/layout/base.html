@@ -50,34 +50,54 @@
     </main>
 
     <!-- Footer -->
-    <footer th:fragment="footer" class="bg-dark text-white py-4 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>Disaster Relief Platform</h5>
-                    <p>Connecting those in need with those who can help during disasters.</p>
+    <footer th:fragment="footer" class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-white text-lg font-semibold mb-4">Disaster Relief Platform</h3>
+                    <p class="text-gray-400">Connecting those in need with those who can help during disasters.</p>
                 </div>
-                <div class="col-md-3">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a class="text-white" th:href="@{/}">Home</a></li>
-                        <li><a class="text-white" th:href="@{/login}">Login</a></li>
-                        <li><a class="text-white" th:href="@{/register}">Register</a></li>
+                <div>
+                    <h3 class="text-white text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a class="hover:text-white" th:href="@{/}">Home</a></li>
+                        <li><a class="hover:text-white" th:href="@{/login}">Login</a></li>
+                        <li><a class="hover:text-white" th:href="@{/register}">Register</a></li>
                     </ul>
                 </div>
-                <div class="col-md-3">
-                    <h5>Contact</h5>
-                    <ul class="list-unstyled">
+                <div>
+                    <h3 class="text-white text-lg font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="emergency-contacts.html" class="hover:text-white">Emergency Contacts</a></li>
+                        <li><a href="training.html" class="hover:text-white">Training</a></li>
+                        <li><a href="chatbot.html" class="hover:text-white">Help Assistant</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white text-lg font-semibold mb-4">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                    <ul class="list-unstyled mt-3">
                         <li><i class="fas fa-envelope me-2"></i> info@disasterrelief.org</li>
                         <li><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</li>
                     </ul>
                 </div>
             </div>
             <div class="text-center mt-3">
-                <p>&copy; 2023 Disaster Relief Platform. All rights reserved.</p>
+                <p>&copy; 2025 Disaster Relief Platform. All rights reserved.</p>
             </div>
         </div>
     </footer>
+    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script th:src="@{/js/scripts.js}"></script>

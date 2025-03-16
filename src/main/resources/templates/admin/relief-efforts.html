@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relief Efforts - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <!-- Statistics Cards -->
+                <div class="row mb-4">
+                    <div class="col-xl-3 col-sm-6 mb-3">
+                        <div class="card text-white bg-primary">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-uppercase">Active Relief Efforts</h6>
+                                        <h2>24</h2>
+                                    </div>
+                                    <i class="fas fa-hands-helping fa-2x opacity-75"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 mb-3">
+                        <div class="card text-white bg-success">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-uppercase">Volunteers Engaged</h6>
+                                        <h2>156</h2>
+                                    </div>
+                                    <i class="fas fa-users fa-2x opacity-75"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 mb-3">
+                        <div class="card text-white bg-warning">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-uppercase">Resources Deployed</h6>
+                                        <h2>$45K</h2>
+                                    </div>
+                                    <i class="fas fa-box-open fa-2x opacity-75"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 mb-3">
+                        <div class="card text-white bg-info">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-uppercase">People Helped</h6>
+                                        <h2>1.2K</h2>
+                                    </div>
+                                    <i class="fas fa-heart fa-2x opacity-75"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Card -->
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="fas fa-hands-helping me-2"></i>Manage Relief Efforts</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Action Buttons -->
+                        <div class="mb-4">
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addReliefModal">
+                                <i class="fas fa-plus me-2"></i>New Relief Effort
+                            </button>
+                        </div>
+
+                        <!-- Relief Efforts Table -->
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Disaster</th>
+                                        <th>Type</th>
+                                        <th>Location</th>
+                                        <th>Resources</th>
+                                        <th>Volunteers</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Kerala Floods</td>
+                                        <td>Medical Aid</td>
+                                        <td>Wayanad, Kerala</td>
+                                        <td>$5,000</td>
+                                        <td>12</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info me-1"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Relief Effort Modal -->
+    <div class="modal fade" id="addReliefModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Add New Relief Effort</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Associated Disaster</label>
+                            <select class="form-select">
+                                <option>Kerala Floods</option>
+                                <option>Gujarat Earthquake</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Relief Type</label>
+                            <select class="form-select">
+                                <option>Medical Aid</option>
+                                <option>Food Supply</option>
+                                <option>Shelter</option>
+                                <option>Search and Rescue</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Required Resources</label>
+                            <input type="number" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Required Volunteers</label>
+                            <input type="number" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Create Relief Effort</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

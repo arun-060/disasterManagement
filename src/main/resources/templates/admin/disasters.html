@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Disasters - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <!-- ... existing navbar code ... -->
+
+    <div class="container-fluid py-4">
+        <div class="row">
+            <!-- ... existing sidebar code ... -->
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="fas fa-exclamation-triangle me-2"></i>Manage Disasters</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDisasterModal">
+                            <i class="fas fa-plus me-2"></i>Add New Disaster
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Disaster Statistics -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card dashboard-card bg-danger text-white">
+                            <div class="card-body">
+                                <h6>Active Disasters</h6>
+                                <h2>12</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card dashboard-card bg-warning text-white">
+                            <div class="card-body">
+                                <h6>Affected Areas</h6>
+                                <h2>28</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card dashboard-card bg-info text-white">
+                            <div class="card-body">
+                                <h6>People Affected</h6>
+                                <h2>15,000</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card dashboard-card bg-success text-white">
+                            <div class="card-body">
+                                <h6>Relief Camps</h6>
+                                <h2>45</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Disaster Map -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-map-marked-alt me-2"></i>Disaster Map
+                    </div>
+                    <div class="card-body">
+                        <!-- Add your map implementation here -->
+                        <div id="disasterMap" style="height: 400px; background-color: #eee;">
+                            <!-- Map will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Disasters Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-table me-2"></i>Active Disasters
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Disaster Type</th>
+                                        <th>Location</th>
+                                        <th>Date</th>
+                                        <th>Severity</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Flood</td>
+                                        <td>Kerala, India</td>
+                                        <td>2024-03-15</td>
+                                        <td><span class="badge bg-danger">High</span></td>
+                                        <td><span class="badge bg-warning">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info me-1"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <!-- Add more rows as needed -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add Disaster Modal -->
+    <div class="modal fade" id="addDisasterModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Add New Disaster</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Disaster Type</label>
+                            <select class="form-select">
+                                <option>Flood</option>
+                                <option>Earthquake</option>
+                                <option>Hurricane</option>
+                                <option>Wildfire</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Severity</label>
+                            <select class="form-select">
+                                <option>Low</option>
+                                <option>Medium</option>
+                                <option>High</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save Disaster</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

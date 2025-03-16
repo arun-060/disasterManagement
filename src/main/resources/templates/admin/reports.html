@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <!-- Add Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- ... existing navbar code ... -->
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- ... existing sidebar code ... -->
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="fas fa-chart-bar me-2"></i>Reports & Analytics</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-outline-secondary">
+                                <i class="fas fa-file-pdf me-2"></i>Export PDF
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary">
+                                <i class="fas fa-file-excel me-2"></i>Export Excel
+                            </button>
+                        </div>
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle">
+                            <i class="fas fa-calendar me-2"></i>This Month
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Report Filters -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form class="row g-3">
+                                    <div class="col-md-3">
+                                        <label class="form-label">Date Range</label>
+                                        <select class="form-select">
+                                            <option>Last 7 Days</option>
+                                            <option>Last 30 Days</option>
+                                            <option>Last 3 Months</option>
+                                            <option>Custom Range</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Report Type</label>
+                                        <select class="form-select">
+                                            <option>All Reports</option>
+                                            <option>Donations</option>
+                                            <option>Disasters</option>
+                                            <option>Relief Efforts</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Region</label>
+                                        <select class="form-select">
+                                            <option>All Regions</option>
+                                            <option>North</option>
+                                            <option>South</option>
+                                            <option>East</option>
+                                            <option>West</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 d-flex align-items-end">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="fas fa-search me-2"></i>Generate Report
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Donations Overview</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="donationsChart" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Disaster Distribution</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="disasterChart" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <h6 class="text-uppercase">Total Relief Efforts</h6>
+                                <h2>156</h2>
+                                <div class="progress bg-white bg-opacity-25 mt-2">
+                                    <div class="progress-bar bg-white" style="width: 75%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <h6 class="text-uppercase">Active Volunteers</h6>
+                                <h2>892</h2>
+                                <div class="progress bg-white bg-opacity-25 mt-2">
+                                    <div class="progress-bar bg-white" style="width: 65%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h6 class="text-uppercase">Total Donations</h6>
+                                <h2>$245K</h2>
+                                <div class="progress bg-white bg-opacity-25 mt-2">
+                                    <div class="progress-bar bg-white" style="width: 85%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body">
+                                <h6 class="text-uppercase">Pending Requests</h6>
+                                <h2>45</h2>
+                                <div class="progress bg-white bg-opacity-25 mt-2">
+                                    <div class="progress-bar bg-white" style="width: 35%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Reports Table -->
+                <div class="card">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-table me-2"></i>Detailed Reports</h5>
+                        <div>
+                            <button class="btn btn-light btn-sm me-2">
+                                <i class="fas fa-download me-1"></i>Export Excel
+                            </button>
+                            <button class="btn btn-light btn-sm">
+                                <i class="fas fa-file-pdf me-1"></i>Export PDF
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Report ID</th>
+                                        <th>Type</th>
+                                        <th>Date</th>
+                                        <th>Region</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#REP001</td>
+                                        <td>Donation Summary</td>
+                                        <td>2024-03-15</td>
+                                        <td>South</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info me-1"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <!-- Add more rows as needed -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Sample charts initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Donations Chart
+            new Chart(document.getElementById('donationsChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Donations ($)',
+                        data: [12000, 19000, 15000, 25000, 22000, 30000],
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                }
+            });
+
+            // Disaster Distribution Chart
+            new Chart(document.getElementById('disasterChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['Floods', 'Earthquakes', 'Cyclones', 'Fires'],
+                    datasets: [{
+                        data: [30, 20, 25, 25],
+                        backgroundColor: [
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 99, 132)',
+                            'rgb(255, 205, 86)',
+                            'rgb(75, 192, 192)'
+                        ]
+                    }]
+                }
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

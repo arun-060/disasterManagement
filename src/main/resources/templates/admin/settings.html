@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <!-- Settings Navigation -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="fas fa-cog me-2"></i>System Settings</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="nav nav-pills mb-4" id="settingsTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#general">
+                                    <i class="fas fa-sliders-h me-2"></i>General
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#security">
+                                    <i class="fas fa-shield-alt me-2"></i>Security
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#notifications">
+                                    <i class="fas fa-bell me-2"></i>Notifications
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#backup">
+                                    <i class="fas fa-database me-2"></i>Backup & Restore
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="settingsTabContent">
+                            <!-- General Settings -->
+                            <div class="tab-pane fade show active" id="general">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-4">General Settings</h5>
+                                        <form>
+                                            <div class="mb-3">
+                                                <label class="form-label">Platform Name</label>
+                                                <input type="text" class="form-control" value="Disaster Relief Platform">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Admin Email</label>
+                                                <input type="email" class="form-control" value="admin@example.com">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Time Zone</label>
+                                                <select class="form-select">
+                                                    <option>UTC</option>
+                                                    <option>IST</option>
+                                                    <option>EST</option>
+                                                    <option>PST</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Date Format</label>
+                                                <select class="form-select">
+                                                    <option>DD/MM/YYYY</option>
+                                                    <option>MM/DD/YYYY</option>
+                                                    <option>YYYY-MM-DD</option>
+                                                </select>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Security Settings -->
+                            <div class="tab-pane fade" id="security">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-4">Security Settings</h5>
+                                        <form>
+                                            <div class="mb-3">
+                                                <label class="form-label">Password Requirements</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" checked>
+                                                    <label class="form-check-label">Require uppercase letters</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" checked>
+                                                    <label class="form-check-label">Require numbers</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" checked>
+                                                    <label class="form-check-label">Require special characters</label>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Minimum Password Length</label>
+                                                <input type="number" class="form-control" value="8">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Two-Factor Authentication</label>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" checked>
+                                                    <label class="form-check-label">Enable 2FA for admin accounts</label>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Update Security Settings</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Notification Settings -->
+                            <div class="tab-pane fade" id="notifications">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-4">Notification Settings</h5>
+                                        <form>
+                                            <div class="mb-3">
+                                                <label class="form-label">Email Notifications</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" checked>
+                                                    <label class="form-check-label">New disaster alerts</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" checked>
+                                                    <label class="form-check-label">New donations</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" checked>
+                                                    <label class="form-check-label">System updates</label>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">SMS Notifications</label>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox">
+                                                    <label class="form-check-label">Enable SMS alerts</label>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Save Notification Preferences</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Backup & Restore -->
+                            <div class="tab-pane fade" id="backup">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-4">Backup & Restore</h5>
+                                        <div class="mb-4">
+                                            <h6>Automated Backups</h6>
+                                            <div class="form-check form-switch mb-3">
+                                                <input class="form-check-input" type="checkbox" checked>
+                                                <label class="form-check-label">Enable automated backups</label>
+                                            </div>
+                                            <select class="form-select mb-3">
+                                                <option>Daily</option>
+                                                <option>Weekly</option>
+                                                <option>Monthly</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-4">
+                                            <h6>Manual Backup</h6>
+                                            <button class="btn btn-primary mb-3">
+                                                <i class="fas fa-download me-2"></i>Create Backup Now
+                                            </button>
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Backup Date</th>
+                                                            <th>Size</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>2024-03-15 10:30 AM</td>
+                                                            <td>256 MB</td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-info me-1">
+                                                                    <i class="fas fa-download"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-danger">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <h6>Restore Backup</h6>
+                                            <div class="input-group">
+                                                <input type="file" class="form-control">
+                                                <button class="btn btn-outline-secondary">Restore</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

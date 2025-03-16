@@ -9,10 +9,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Collection;
 
 @Controller
+// @RequestMapping("/admin")
 public class DashboardController {
 
     @GetMapping("/dashboard")
@@ -46,6 +48,43 @@ public class DashboardController {
     public String adminDashboard() {
         return "admin/dashboard";
     }
+
+    @GetMapping("/admin/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String adminUsers() {
+        return "admin/users";
+    }
+
+    @GetMapping("/admin/disasters")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String adminDisasters() {
+        return "admin/disasters";
+    }
+
+    @GetMapping("/admin/relief-efforts")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String adminReliefEfforts() {
+        return "admin/relief-efforts";
+    }
+
+    @GetMapping("/admin/donations")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String adminDonations() {
+        return "admin/donations";
+    }
+    
+    @GetMapping("/admin/reports")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String adminReports() {
+        return "admin/reports";
+    }
+    
+    @GetMapping("/admin/settings")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String adminSettings() {
+        return "admin/settings";
+    }
+    
     
     @GetMapping("/donor/dashboard")
     @PreAuthorize("hasRole('DONOR')")
@@ -64,4 +103,41 @@ public class DashboardController {
     public String affectedPersonDashboard() {
         return "affected/dashboard";
     }
+
+    @GetMapping("/affected/request-assistance")
+    @PreAuthorize("hasRole('AFFECTED_PERSON')")
+    public String affectedPersonRequestAssistance() {
+        return "affected/request-assistance";
+    }
+
+    @GetMapping("/affected/my-requests")
+    @PreAuthorize("hasRole('AFFECTED_PERSON')")
+    public String affectedPersonMyRequests() {
+        return "affected/my-requests";
+    }
+
+    @GetMapping("/affected/relief-centers")
+    @PreAuthorize("hasRole('AFFECTED_PERSON')")
+    public String affectedPersonReliefCenters() {
+        return "affected/relief-centers";
+    }
+    
+    @GetMapping("/affected/alerts")
+    @PreAuthorize("hasRole('AFFECTED_PERSON')")
+    public String affectedPersonAlerts() {
+        return "affected/alerts";
+    }
+    
+    @GetMapping("/affected/community")
+    @PreAuthorize("hasRole('AFFECTED_PERSON')")
+    public String affectedPersonCommunity() {
+        return "affected/community";
+    }
+
+    @GetMapping("/affected/profile")
+    @PreAuthorize("hasRole('AFFECTED_PERSON')")
+    public String affectedPersonProfile() {
+        return "affected/profile";
+    }
+    
 } 
