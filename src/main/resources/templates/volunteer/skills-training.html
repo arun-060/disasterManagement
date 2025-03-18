@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills & Training - Disaster Relief Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+    <style>
+        .navbar {
+            z-index: 1030;
+            height: 56px;
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+        }
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #343a40;
+            color: white;
+            position: fixed;
+            top: 56px;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 0;
+            width: 16.67%;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+        }
+        .sidebar .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar .nav-link.active {
+            color: white;
+            background-color: #007bff;
+        }
+        main {
+            margin-left: 16.67%;
+            padding-top: 56px;
+        }
+        .course-card {
+            transition: transform 0.3s;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+        }
+        @media (max-width: 768px) {
+            main {
+                margin-left: 0;
+            }
+            .sidebar {
+                position: static;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="fas fa-hands-helping me-2"></i>
+                Disaster Relief Platform
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> <span sec:authentication="name">Username</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                                <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Fixed Sidebar -->
+    <nav class="sidebar">
+        <div class="pt-3">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="/volunteer/dashboard">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/volunteer/my-tasks">
+                        <i class="fas fa-tasks"></i> My Tasks
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/volunteer/schedule">
+                        <i class="fas fa-calendar"></i> Schedule
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/volunteer/active-disasters">
+                        <i class="fas fa-exclamation-triangle"></i> Active Disasters
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/volunteer/skills-training">
+                        <i class="fas fa-graduation-cap"></i> Skills & Training
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/volunteer/activity-log">
+                        <i class="fas fa-history"></i> Activity Log
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/volunteer/profile">
+                        <i class="fas fa-user"></i> Profile
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Skills & Training</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#enrollCourseModal">
+                        <i class="fas fa-plus"></i> Enroll in Course
+                    </button>
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-download"></i> Download Certificate
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Training Statistics -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Completed Courses</h5>
+                            <h2 class="card-text">8</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Certifications</h5>
+                            <h2 class="card-text">5</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">In Progress</h5>
+                            <h2 class="card-text">2</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Skill Level</h5>
+                            <h2 class="card-text">Advanced</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills Overview -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">My Skills</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <h6>First Aid</h6>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 90%">90%</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <h6>Emergency Response</h6>
+                                <div class="progress">
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 75%">75%</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <h6>Crisis Management</h6>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 85%">85%</div>
+                                </div>
+                            </div>
+                            <!-- Add more skills -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Certifications</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group">
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Advanced First Aid</h6>
+                                        <small>Expires: 2025</small>
+                                    </div>
+                                    <small class="text-muted">Issued by Red Cross</small>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Emergency Response</h6>
+                                        <small>Expires: 2024</small>
+                                    </div>
+                                    <small class="text-muted">Issued by FEMA</small>
+                                </a>
+                                <!-- Add more certifications -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Courses -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Available Training Courses</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Course 1 -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <img src="https://cdn.pixabay.com/photo/2017/07/31/11/31/people-2557399_1280.jpg"
+                                     class="card-img-top"
+                                     alt="First Aid Training"
+                                     style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Advanced First Aid</h5>
+                                    <p class="card-text">Learn advanced medical response techniques.</p>
+                                    <div class="mb-2">
+                                        <span class="badge bg-primary">Medical</span>
+                                        <span class="badge bg-success">Certification</span>
+                                    </div>
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#courseDetailsModal">
+                                        View Details
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Course 2 -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <img src="https://cdn.pixabay.com/photo/2017/07/31/11/31/people-2557399_1280.jpg"
+                                     class="card-img-top"
+                                     alt="Crisis Management"
+                                     style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Crisis Management</h5>
+                                    <p class="card-text">Master emergency situation handling.</p>
+                                    <div class="mb-2">
+                                        <span class="badge bg-warning">Management</span>
+                                        <span class="badge bg-info">Advanced</span>
+                                    </div>
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#courseDetailsModal">
+                                        View Details
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Course 3 -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <img src="https://cdn.pixabay.com/photo/2017/07/31/11/31/people-2557399_1280.jpg"
+                                     class="card-img-top"
+                                     alt="Rescue Operations"
+                                     style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Rescue Operations</h5>
+                                    <p class="card-text">Learn advanced rescue techniques.</p>
+                                    <div class="mb-2">
+                                        <span class="badge bg-danger">Rescue</span>
+                                        <span class="badge bg-primary">Physical</span>
+                                    </div>
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#courseDetailsModal">
+                                        View Details
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Course Details Modal -->
+    <div class="modal fade" id="courseDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Course Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Course Overview</h6>
+                            <p>Comprehensive training in advanced medical response techniques.</p>
+                            <ul class="list-group mb-3">
+                                <li class="list-group-item">Duration: 4 weeks</li>
+                                <li class="list-group-item">Level: Advanced</li>
+                                <li class="list-group-item">Prerequisites: Basic First Aid</li>
+                                <li class="list-group-item">Certification: Yes</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>What You'll Learn</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Advanced medical procedures</li>
+                                <li><i class="fas fa-check text-success"></i> Emergency response protocols</li>
+                                <li><i class="fas fa-check text-success"></i> Team coordination</li>
+                                <li><i class="fas fa-check text-success"></i> Equipment handling</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Enroll Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html> 

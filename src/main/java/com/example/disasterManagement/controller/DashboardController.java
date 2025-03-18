@@ -127,7 +127,43 @@ public class DashboardController {
     public String volunteerDashboard() {
         return "volunteer/dashboard";
     }
+
+    @GetMapping("/volunteer/my-tasks")
+    @PreAuthorize("hasRole('VOLUNTEER')")
+    public String volunteerMyTasks() {
+        return "volunteer/my-tasks";
+    }
     
+    @GetMapping("/volunteer/schedule")
+    @PreAuthorize("hasRole('VOLUNTEER')")
+    public String volunteerSchedule() {
+        return "volunteer/schedule";
+    }
+
+    @GetMapping("/volunteer/active-disasters")
+    @PreAuthorize("hasRole('VOLUNTEER')")
+    public String volunteerActiveDisasters() {
+        return "volunteer/active-disasters";
+    }
+
+    @GetMapping("/volunteer/skills-training")
+    @PreAuthorize("hasRole('VOLUNTEER')")
+    public String volunteerSkillsTraining() {
+        return "volunteer/skills-training";
+    }
+
+    @GetMapping("/volunteer/activity-log")
+    @PreAuthorize("hasRole('VOLUNTEER')")
+    public String volunteerActivityLog() {
+        return "volunteer/activity-log";
+    }
+
+    @GetMapping("/volunteer/profile")
+    @PreAuthorize("hasRole('VOLUNTEER')")
+    public String volunteerProfile() {
+        return "volunteer/profile";
+    }
+
     @GetMapping("/affected/dashboard")
     @PreAuthorize("hasRole('AFFECTED_PERSON')")
     public String affectedPersonDashboard() {
