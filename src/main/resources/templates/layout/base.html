@@ -3,104 +3,903 @@
 <head th:fragment="head">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crowdsourced Disaster Relief</title>
+    <title>Disaster Relief Platform</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .navbar.scrolled {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)),
+                        url('https://images.pexels.com/photos/6646917/pexels-photo-6646917.jpeg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            color: white;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.3s;
+            opacity: 0.9;
+        }
+
+        .btn-hero {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease 0.6s;
+        }
+
+        .btn-get-started {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-hero:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .step-card {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--secondary-color);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .step-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Live Updates Section */
+        .live-updates {
+            padding: 100px 0;
+            background: #f8f9fa;
+        }
+
+        .map-container {
+            height: 500px;
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            position: relative;
+            border: 2px solid #e9ecef;
+        }
+
+        .update-feed {
+            height: 500px;
+            overflow-y: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .update-item {
+            padding: 15px;
+            border-left: 4px solid var(--secondary-color);
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 0 10px 10px 0;
+            transition: all 0.3s ease;
+        }
+
+        .update-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .disaster-marker {
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .severity-high {
+            color: #e74c3c;
+        }
+
+        .severity-medium {
+            color: #f39c12;
+        }
+
+        .severity-low {
+            color: #3498db;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 100px 0;
+            background: #f8f9fa;
+        }
+
+        .accordion-item {
+            border: none;
+            margin-bottom: 1rem;
+            border-radius: 10px !important;
+            overflow: hidden;
+        }
+
+        .accordion-button {
+            padding: 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            background: white;
+            border: none;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 50px 0 20px;
+        }
+
+        .social-icons a {
+            color: white;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            text-decoration: none;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        /* Custom marker styles */
+        .custom-marker {
+            text-align: center;
+        }
+
+        .marker-high {
+            color: #e74c3c;
+        }
+
+        .marker-medium {
+            color: #f39c12;
+        }
+
+        .marker-low {
+            color: #3498db;
+        }
+
+        /* Add these specific map styles */
+        #india-map {
+            height: 100%;
+            width: 100%;
+            min-height: 500px;
+            z-index: 1;
+            background-color: #f8f9fa;
+        }
+
+        /* Custom Popup Styles */
+        .disaster-popup {
+            padding: 15px;
+            min-width: 250px;
+        }
+
+        .disaster-popup-header {
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .disaster-popup-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .disaster-popup-type {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .disaster-popup-content {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .disaster-popup-stat {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .disaster-popup-stat i {
+            margin-right: 8px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Custom Marker Pulse Effect */
+        .marker-pulse {
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .marker-pulse::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Legend Styles */
+        .map-legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        /* Make sure Leaflet styles are properly applied */
+        .leaflet-container {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav th:fragment="nav" class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <a class="navbar-brand" th:href="@{/}">
-                <i class="fas fa-hands-helping me-2"></i>
-                Disaster Relief Platform
-            </a>
+            <a class="navbar-brand text-primary fw-bold" href="#">Disaster Relief</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/}">Home</a>
+                        <a class="nav-link" href="#how-it-works">How It Works</a>
                     </li>
-                    <li class="nav-item" sec:authorize="!isAuthenticated()">
-                        <a class="nav-link" th:href="@{/login}">Login</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#impact">Impact</a>
                     </li>
-                    <li class="nav-item" sec:authorize="!isAuthenticated()">
-                        <a class="nav-link" th:href="@{/register}">Register</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#faq">FAQ</a>
                     </li>
-                    <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
-                    </li>
-                    <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <a class="nav-link" href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
-                        <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+                    <li class="nav-item">
+                        <a class="btn btn-primary ms-3" href="/login">Login</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="container my-4">
-        <div th:replace="${content}">
-            <!-- Content will be replaced -->
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer th:fragment="footer" class="bg-gray-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <h3 class="text-white text-lg font-semibold mb-4">Disaster Relief Platform</h3>
-                    <p class="text-gray-400">Connecting those in need with those who can help during disasters.</p>
-                </div>
-                <div>
-                    <h3 class="text-white text-lg font-semibold mb-4">Quick Links</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a class="hover:text-white" th:href="@{/}">Home</a></li>
-                        <li><a class="hover:text-white" th:href="@{/login}">Login</a></li>
-                        <li><a class="hover:text-white" th:href="@{/register}">Register</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-white text-lg font-semibold mb-4">Resources</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="emergency-contacts.html" class="hover:text-white">Emergency Contacts</a></li>
-                        <li><a href="training.html" class="hover:text-white">Training</a></li>
-                        <li><a href="chatbot.html" class="hover:text-white">Help Assistant</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-white text-lg font-semibold mb-4">Connect</h3>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                    </div>
-                    <ul class="list-unstyled mt-3">
-                        <li><i class="fas fa-envelope me-2"></i> info@disasterrelief.org</li>
-                        <li><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</li>
-                    </ul>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Rapid Response When Every Second Counts</h1>
+                <p class="hero-subtitle">Join us in making a difference during times of crisis</p>
+                <div class="hero-buttons">
+                    <a href="/register" class="btn btn-hero btn-get-started">Get Started</a>
+                    <a href="/login" class="btn btn-hero btn-login">Login</a>
                 </div>
             </div>
-            <div class="text-center mt-3">
-                <p>&copy; 2025 Disaster Relief Platform. All rights reserved.</p>
+        </div>
+        <a href="#how-it-works" class="scroll-down">
+            <i class="fas fa-chevron-down"></i>
+            <span>Scroll Down</span>
+        </a>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-title text-center mb-5">
+                <h2 class="display-4 fw-bold mb-3">How It Works</h2>
+                <p class="lead text-muted">Three simple steps to make a difference</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <i class="fas fa-exclamation-circle feature-icon"></i>
+                        <h3>Report</h3>
+                        <p>Report disasters or emergencies in your area quickly and easily</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <i class="fas fa-hands-helping feature-icon"></i>
+                        <h3>Connect</h3>
+                        <p>Connect with volunteers and organizations providing assistance</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <i class="fas fa-chart-line feature-icon"></i>
+                        <h3>Track</h3>
+                        <p>Monitor relief efforts and track the impact of your contribution</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Stats Section -->
+    <section id="impact" class="stats-section">
+        <div class="container">
+            <div class="section-title text-center mb-5">
+                <h2 class="display-4 fw-bold mb-3">Our Impact</h2>
+                <p class="lead text-muted">Making a difference together</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">5000+</div>
+                        <h4>Lives Impacted</h4>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">1000+</div>
+                        <h4>Volunteers</h4>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">200+</div>
+                        <h4>Relief Operations</h4>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">50+</div>
+                        <h4>Partner NGOs</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Updates Section -->
+    <section class="live-updates">
+        <div class="container">
+            <div class="section-title text-center mb-5">
+                <h2 class="display-4 fw-bold mb-3">Live Updates</h2>
+                <p class="lead text-muted">Track ongoing relief operations across India</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="map-container">
+                        <div id="india-map"></div>
+                        <div class="map-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #e74c3c;"></div>
+                                <span>High Severity</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #f39c12;"></div>
+                                <span>Medium Severity</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #3498db;"></div>
+                                <span>Low Severity</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="update-feed">
+                        <h4 class="mb-4">Recent Updates</h4>
+                        <div class="update-item">
+                            <small class="text-muted">2 minutes ago</small>
+                            <h5 class="severity-high">Kerala Floods</h5>
+                            <p>Emergency response teams deployed in Wayanad district. 200+ people evacuated.</p>
+                        </div>
+                        <div class="update-item">
+                            <small class="text-muted">1 hour ago</small>
+                            <h5 class="severity-medium">Gujarat Cyclone Alert</h5>
+                            <p>Preventive measures initiated in coastal areas of Saurashtra.</p>
+                        </div>
+                        <div class="update-item">
+                            <small class="text-muted">3 hours ago</small>
+                            <h5 class="severity-low">Maharashtra Landslide</h5>
+                            <p>Relief camps set up in Raigad district. Medical supplies being distributed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq-section">
+        <div class="container">
+            <div class="section-title text-center mb-5">
+                <h2 class="display-4 fw-bold mb-3">Frequently Asked Questions</h2>
+                <p class="lead text-muted">Find answers to common questions</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    How can I volunteer?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Register as a volunteer through our platform, complete the verification process, and start participating in relief operations in your area.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    How can I report a disaster?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Use our mobile app or website to report disasters. Provide location details and photos if possible. Our team will verify and respond quickly.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                    How are donations used?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    100% of donations go directly to relief efforts. Track the impact of your donation through our transparent reporting system.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Join Us in Making a Difference</h2>
+                <p class="cta-subtitle">Every contribution counts in times of crisis</p>
+                <div class="cta-buttons">
+                    <a href="/register" class="btn btn-hero btn-get-started">Get Started</a>
+                    <a href="/login" class="btn btn-hero btn-login">Login</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Us</h5>
+                    <p>We are dedicated to providing rapid response and relief during disasters across India.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#impact">Impact</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Connect With Us</h5>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-4">
+            <div class="text-center">
+                <p>&copy; 2024 Disaster Relief Platform. All rights reserved.</p>
             </div>
         </div>
     </footer>
     
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script th:src="@{/js/scripts.js}"></script>
-    <script th:src="@{/js/auth.js}"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            } else {
+                document.querySelector('.navbar').classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize map with custom style
+            const map = L.map('india-map', {
+                center: [20.5937, 78.9629],
+                zoom: 5,
+                zoomControl: false, // We'll add it manually to a better position
+                maxBounds: [
+                    [-8.4, 68.7],
+                    [37.6, 97.25]
+                ],
+                minZoom: 4,
+                maxZoom: 12
+            });
+
+            // Add zoom control to top-right
+            L.control.zoom({
+                position: 'topright'
+            }).addTo(map);
+
+            // Custom map style
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                className: 'map-tiles'
+            }).addTo(map);
+
+            // Updated disaster locations with more details
+            const disasters = [
+                {
+                    position: [10.8505, 76.2711],
+                    title: "Kerala Floods",
+                    severity: "high",
+                    details: "Severe flooding in Wayanad district",
+                    affected: "1000+ people",
+                    type: "Flood",
+                    timestamp: "2 hours ago",
+                    status: "Active",
+                    resources: "Emergency teams deployed"
+                },
+                {
+                    position: [22.2587, 71.1924],
+                    title: "Gujarat Cyclone",
+                    severity: "medium",
+                    details: "Cyclone warning in Saurashtra coast",
+                    affected: "Coastal regions",
+                    type: "Cyclone",
+                    timestamp: "5 hours ago",
+                    status: "Warning",
+                    resources: "Evacuation in progress"
+                },
+                {
+                    position: [18.5204, 73.8567],
+                    title: "Maharashtra Landslide",
+                    severity: "low",
+                    details: "Landslide in Raigad district",
+                    affected: "300+ people",
+                    type: "Landslide",
+                    timestamp: "3 hours ago",
+                    status: "Resolved",
+                    resources: "Relief camps set up"
+                },
+                {
+                    position: [25.5941, 85.1376],
+                    title: "Bihar Floods",
+                    severity: "high",
+                    details: "Flood situation in Patna district",
+                    affected: "500+ families",
+                    type: "Flood",
+                    timestamp: "1 hour ago",
+                    status: "Active",
+                    resources: "Emergency supplies being distributed"
+                },
+                {
+                    position: [15.9129, 79.7400],
+                    title: "Andhra Pradesh Drought",
+                    severity: "medium",
+                    details: "Drought conditions in Rayalaseema",
+                    affected: "Rural communities",
+                    type: "Drought",
+                    timestamp: "4 hours ago",
+                    status: "Alert",
+                    resources: "Water distribution efforts"
+                }
+            ];
+
+            // Create custom marker function
+            function createCustomMarker(disaster) {
+                const severityColors = {
+                    high: '#e74c3c',
+                    medium: '#f39c12',
+                    low: '#3498db'
+                };
+
+                const markerHtmlStyles = `
+                    background-color: ${severityColors[disaster.severity]};
+                    width: 25px;
+                    height: 25px;
+                    display: block;
+                    position: relative;
+                    border-radius: 50%;
+                    border: 3px solid white;
+                    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+                `;
+
+                return L.divIcon({
+                    className: `custom-marker marker-${disaster.severity} marker-pulse`,
+                    iconAnchor: [12, 12],
+                    popupAnchor: [0, -12],
+                    html: `<span style="${markerHtmlStyles}" class="marker-pulse"></span>`
+                });
+            }
+
+            // Add markers for each disaster
+            disasters.forEach(disaster => {
+                const marker = L.marker(disaster.position, {
+                    icon: createCustomMarker(disaster)
+                }).addTo(map);
+
+                // Enhanced popup content
+                const popupContent = `
+                    <div class="disaster-popup">
+                        <div class="disaster-popup-header">
+                            <div class="disaster-popup-title severity-${disaster.severity}">
+                                ${disaster.title}
+                            </div>
+                            <div class="disaster-popup-type">
+                                ${disaster.type} • ${disaster.timestamp}
+                            </div>
+                        </div>
+                        <div class="disaster-popup-content">
+                            <div class="disaster-popup-stat">
+                                <i class="fas fa-info-circle"></i>
+                                <span>${disaster.details}</span>
+                            </div>
+                            <div class="disaster-popup-stat">
+                                <i class="fas fa-users"></i>
+                                <span>${disaster.affected}</span>
+                            </div>
+                            <div class="disaster-popup-stat">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>Status: ${disaster.status}</span>
+                            </div>
+                            <div class="disaster-popup-stat">
+                                <i class="fas fa-truck"></i>
+                                <span>${disaster.resources}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Create popup with custom options
+                const popup = L.popup({
+                    maxWidth: 300,
+                    className: 'custom-popup'
+                }).setContent(popupContent);
+
+                marker.bindPopup(popup);
+
+                // Add hover effect
+                marker.on('mouseover', function() {
+                    this.openPopup();
+                });
+            });
+
+            // Force a map resize after initialization
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 100);
+        });
+    </script>
 </body>
 </html> 
+        
