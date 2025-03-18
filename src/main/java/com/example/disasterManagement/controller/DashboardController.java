@@ -91,6 +91,36 @@ public class DashboardController {
     public String donorDashboard() {
         return "donor/dashboard";
     }
+
+    @GetMapping("/donor/make-donation")
+    @PreAuthorize("hasRole('DONOR')")
+    public String donorMakeDonation() {
+        return "donor/make-donation";
+    }
+    
+    @GetMapping("/donor/donation-history")
+    @PreAuthorize("hasRole('DONOR')")
+    public String donorDonationHistory() {
+        return "donor/donation-history";
+    }
+
+    @GetMapping("/donor/active-disasters")
+    @PreAuthorize("hasRole('DONOR')")
+    public String donorActiveDisasters() {
+        return "donor/active-disasters";
+    }
+
+    @GetMapping("/donor/impact-reports")
+    @PreAuthorize("hasRole('DONOR')")
+    public String donorImpactReports() {
+        return "donor/impact-reports";
+    }
+
+    @GetMapping("/donor/profile")
+    @PreAuthorize("hasRole('DONOR')")
+    public String donorProfile() {
+        return "donor/profile";
+    }
     
     @GetMapping("/volunteer/dashboard")
     @PreAuthorize("hasRole('VOLUNTEER')")
