@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <nav th:fragment="sidebar" id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="position-sticky pt-3">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/volunteer/dashboard}" th:classappend="${currentPage == 'dashboard'} ? 'active' : ''">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/volunteer/my-tasks}" th:classappend="${currentPage == 'my-tasks'} ? 'active' : ''">
+                        <i class="fas fa-tasks"></i> My Tasks
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/volunteer/schedule}" th:classappend="${currentPage == 'schedule'} ? 'active' : ''">
+                        <i class="fas fa-calendar"></i> Schedule
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/volunteer/active-disasters}" th:classappend="${currentPage == 'active-disasters'} ? 'active' : ''">
+                        <i class="fas fa-exclamation-triangle"></i> Active Disasters
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/volunteer/skills-training}" th:classappend="${currentPage == 'skills-training'} ? 'active' : ''">
+                        <i class="fas fa-graduation-cap"></i> Skills & Training
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/volunteer/activity-log}" th:classappend="${currentPage == 'activity-log'} ? 'active' : ''">
+                        <i class="fas fa-history"></i> Activity Log
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/volunteer/profile}" th:classappend="${currentPage == 'profile'} ? 'active' : ''">
+                        <i class="fas fa-user"></i> Profile
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</body>
+</html> 

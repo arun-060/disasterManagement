@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' - Disaster Relief Platform'">Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        /* Add your common styles here */
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #343a40;
+            color: white;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+        }
+        .sidebar .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar .nav-link.active {
+            color: white;
+            background-color: #007bff;
+        }
+        .dashboard-card {
+            border-radius: 10px;
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Fragment -->
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <!-- Copy your existing navbar code here -->
+    </nav>
+
+    <!-- Sidebar Fragment -->
+    <div th:fragment="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+        <!-- Copy your updated sidebar code here -->
+    </div>
+
+    <!-- Scripts Fragment -->
+    <div th:fragment="scripts">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script th:src="@{/js/scripts.js}"></script>
+        <script th:src="@{/js/auth.js}"></script>
+    </div>
+</body>
+</html> 

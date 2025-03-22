@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Assistance - Disaster Relief Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        /* Copy the same sidebar styles from dashboard.html */
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #343a40;
+            color: white;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+        }
+        .sidebar .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar .nav-link.active {
+            color: white;
+            background-color: #007bff;
+        }
+        .dashboard-card {
+            border-radius: 10px;
+            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        /* Layout structure styles */
+
+
+/* Footer specific styles */
+.footer {
+    margin-top: auto;
+    background: #ffffff;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.03);
+    width: 100%;
+}
+
+.footer-content {
+    padding: 24px;
+}
+
+.quick-stats .stat-value {
+    color: #2563eb;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.border-end {
+    width: 1px;
+    height: 40px;
+    background: #e5e7eb;
+}
+
+.footer a:hover {
+    color: #2563eb !important;
+}
+
+@media (max-width: 992px) {
+    .footer-content .row > div {
+        text-align: center;
+    }
+    
+    .footer-content .row > div:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    .d-flex {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        margin-left: 0;
+    }
+    .sidebar {
+        position: static;
+        width: 100%;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Navigation - Copy the same navbar from dashboard.html -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="fas fa-hands-helping me-2"></i>
+                Disaster Relief Platform
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> <span sec:authentication="name">Username</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" th:href="@{/affected/profile}"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                                <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar - Copy the same sidebar structure from dashboard.html but change active class -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/affected/dashboard}">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" th:href="@{/affected/request-assistance}">
+                                <i class="fas fa-hand-holding-heart me-2"></i>
+                                Request Assistance
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/affected/my-requests}">
+                                <i class="fas fa-clipboard-list me-2"></i>
+                                My Requests
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/affected/relief-centers}">
+                                <i class="fas fa-map-marker-alt me-2"></i>
+                                Relief Centers
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/affected/alerts}">
+                                <i class="fas fa-bell me-2"></i>
+                                Alerts
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/affected/community}">
+                                <i class="fas fa-comments me-2"></i>
+                                Community Support
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/affected/profile}">
+                                <i class="fas fa-user me-2"></i>
+                                Profile
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="fas fa-hand-holding-heart me-2"></i>Request Assistance</h1>
+                </div>
+
+                <!-- Request Form -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form th:action="@{/affected/request-assistance}" method="post">
+                            <div class="mb-3">
+                                <label for="requestType" class="form-label">Type of Assistance</label>
+                                <select class="form-select" id="requestType" name="requestType" required>
+                                    <option value="">Select type of assistance</option>
+                                    <option value="FOOD_WATER">Food & Water</option>
+                                    <option value="MEDICAL">Medical Supplies</option>
+                                    <option value="SHELTER">Temporary Shelter</option>
+                                    <option value="CLOTHING">Clothing</option>
+                                    <option value="OTHER">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="urgency" class="form-label">Urgency Level</label>
+                                <select class="form-select" id="urgency" name="urgency" required>
+                                    <option value="LOW">Low</option>
+                                    <option value="MEDIUM">Medium</option>
+                                    <option value="HIGH">High</option>
+                                    <option value="EMERGENCY">Emergency</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="4" required 
+                                    placeholder="Please describe your needs in detail..."></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Location</label>
+                                <input type="text" class="form-control" id="location" name="location" required
+                                    placeholder="Enter your current location">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="contact" class="form-label">Contact Number</label>
+                                <input type="tel" class="form-control" id="contact" name="contact" required
+                                    placeholder="Enter your contact number">
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="urgent" name="urgent">
+                                    <label class="form-check-label" for="urgent">
+                                        This is an urgent request
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit Request
+                                </button>
+                                <button type="reset" class="btn btn-secondary">
+                                    <i class="fas fa-undo me-2"></i>Reset Form
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <footer th:fragment="footer" class="footer">
+                    <div class="footer-content border-top pt-4 pb-4">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-lg-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-hands-helping text-primary me-2 fa-2x"></i>
+                                    <h5 class="mb-0 fw-bold">Disaster Relief Platform</h5>
+                                </div>
+                                <p class="text-muted mb-0">Empowering communities through rapid disaster response and relief coordination.</p>
+                            </div>
+                            
+                            <div class="col-lg-4">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <div class="quick-stats text-center px-3">
+                                        <div class="stat-value text-primary fw-bold h4 mb-1">24/7</div>
+                                        <div class="stat-label text-muted small">Support</div>
+                                    </div>
+                                    <div class="border-end"></div>
+                                    <div class="quick-stats text-center px-3">
+                                        <div class="stat-value text-primary fw-bold h4 mb-1">100+</div>
+                                        <div class="stat-label text-muted small">Communities</div>
+                                    </div>
+                                    <div class="border-end"></div>
+                                    <div class="quick-stats text-center px-3">
+                                        <div class="stat-value text-primary fw-bold h4 mb-1">50K+</div>
+                                        <div class="stat-label text-muted small">Lives Impacted</div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <div class="col-lg-4">
+                                <div class="d-flex justify-content-end align-items-center gap-3">
+                                    <a href="#" class="text-muted text-decoration-none small">Privacy Policy</a>
+                                    <span class="text-muted">|</span>
+                                    <a href="#" class="text-muted text-decoration-none small">Terms of Service</a>
+                                    <span class="text-muted">|</span>
+                                    <a href="#" class="text-muted text-decoration-none small">Contact</a>
+                                </div>
+                                <div class="text-end mt-2">
+                                    <p class="text-muted small mb-0">&copy; 2024 Disaster Relief Platform. All rights reserved.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>            
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/scripts.js}"></script>
+    <script th:src="@{/js/auth.js}"></script>
+</body>
+</html>
