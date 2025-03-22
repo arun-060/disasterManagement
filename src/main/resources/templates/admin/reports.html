@@ -402,7 +402,7 @@ main {
                             </table>
                         </div>
                     </div>
-        </div>
+                </div>
     </div>
 
         <!-- Footer -->
@@ -451,7 +451,7 @@ main {
                 </div>
             </div>
         </footer>    
-    </main>
+            </main>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -486,10 +486,10 @@ main {
         // User Activity Chart
         const userActivityCtx = document.getElementById('userActivityChart').getContext('2d');
         new Chart(userActivityCtx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
                     label: 'Active Users',
                     data: [1200, 1350, 1250, 1500, 1750, 2000],
                     borderColor: '#0d6efd',
@@ -523,11 +523,11 @@ main {
         const reliefDistributionCtx = document.getElementById('reliefDistributionChart').getContext('2d');
         new Chart(reliefDistributionCtx, {
             type: 'doughnut',
-            data: {
+                data: {
                 labels: ['Medical Aid', 'Food & Water', 'Shelter', 'Emergency Response', 'Other'],
-                datasets: [{
+                    datasets: [{
                     data: [30, 25, 20, 15, 10],
-                    backgroundColor: [
+                        backgroundColor: [
                         '#0d6efd',
                         '#198754',
                         '#ffc107',

@@ -154,6 +154,15 @@ main {
                 width: 100%;
             }
         }
+
+.card-body {
+    padding: 1rem;
+    width: 100%;
+}
+
+canvas {
+    max-width: 100%;
+}
     </style>
 </head>
 <body>
@@ -298,7 +307,9 @@ main {
                     <h5 class="mb-0">Donation Trends</h5>
                 </div>
                 <div class="card-body">
-                    <canvas id="donationsChart" height="300"></canvas>
+                    <div style="min-height: 400px; width: 100%; margin: 0 auto;">
+                        <canvas id="donationsChart" style="width: 100% !important;"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -468,15 +479,15 @@ main {
                             <label class="fw-bold">Amount:</label>
                             <p id="viewAmount" class="mb-1"></p>
                         </div>
-                        <div class="mb-3">
+                    <div class="mb-3">
                             <label class="fw-bold">Campaign:</label>
                             <p id="viewCampaign" class="mb-1"></p>
-                        </div>
-                        <div class="mb-3">
+                    </div>
+                    <div class="mb-3">
                             <label class="fw-bold">Date:</label>
                             <p id="viewDate" class="mb-1"></p>
-                        </div>
-                        <div class="mb-3">
+                    </div>
+                    <div class="mb-3">
                             <label class="fw-bold">Status:</label>
                             <p id="viewStatus" class="mb-1"></p>
                         </div>
@@ -517,6 +528,19 @@ main {
 
         // Donation trends chart
         const ctx = document.getElementById('donationsChart').getContext('2d');
+        
+        // Set chart dimensions based on container width
+        function resizeChart() {
+            const container = document.querySelector('.card-body');
+            const chartCanvas = document.getElementById('donationsChart');
+            chartCanvas.style.width = '100%';
+            chartCanvas.style.height = '400px';
+        }
+
+        // Call resize function initially and on window resize
+        resizeChart();
+        window.addEventListener('resize', resizeChart);
+
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -539,18 +563,41 @@ main {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false, // Changed to false to allow custom dimensions
                 plugins: {
                     legend: {
                         position: 'top',
+                        labels: {
+                            boxWidth: 15,
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
                     },
                     title: {
                         display: true,
-                        text: 'Donation Trends - Last 6 Months'
+                        text: 'Donation Trends - Last 6 Months',
+                        padding: {
+                            top: 10,
+                            bottom: 20
+                        },
+                        font: {
+                            size: 14
+                        }
                     }
                 },
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            maxTicksLimit: 8
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: true
+                        }
                     }
                 }
             }
