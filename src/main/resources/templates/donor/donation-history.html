@@ -215,7 +215,7 @@
                     <div class="card history-card bg-primary text-white">
                         <div class="card-body">
                             <h5 class="card-title">Total Donated</h5>
-                            <h2>$2,450</h2>
+                            <h2 th:text="${totalDonated != null ? '$' + #numbers.formatDecimal(totalDonated, 0, 'COMMA', 0, 'POINT') : '$0'}">$0</h2>
                             <p class="mb-0">Lifetime contributions</p>
                         </div>
                     </div>
@@ -224,7 +224,7 @@
                     <div class="card history-card bg-success text-white">
                         <div class="card-body">
                             <h5 class="card-title">Projects Supported</h5>
-                            <h2>12</h2>
+                            <h2 th:text="${projectsSupported != null ? projectsSupported : '0'}">0</h2>
                             <p class="mb-0">Relief efforts</p>
                         </div>
                     </div>
@@ -233,8 +233,8 @@
                     <div class="card history-card bg-info text-white">
                         <div class="card-body">
                             <h5 class="card-title">Last Donation</h5>
-                            <h2>$150</h2>
-                            <p class="mb-0">2 days ago</p>
+                            <h2 th:text="${lastDonation != null ? '$' + #numbers.formatDecimal(lastDonation, 0, 'COMMA', 0, 'POINT') : '$0'}">$0</h2>
+                            <p class="mb-0" th:text="${lastDonationDate != null ? lastDonationDate : 'No donations yet'}">No donations yet</p>
                         </div>
                     </div>
                 </div>
@@ -242,7 +242,7 @@
                     <div class="card history-card bg-warning text-white">
                         <div class="card-body">
                             <h5 class="card-title">Tax Deductible</h5>
-                            <h2>$2,200</h2>
+                            <h2 th:text="${taxDeductible != null ? '$' + #numbers.formatDecimal(taxDeductible, 0, 'COMMA', 0, 'POINT') : '$0'}">$0</h2>
                             <p class="mb-0">This year</p>
                         </div>
                     </div>
@@ -266,27 +266,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>2023-06-15</td>
-                                    <td>$150.00</td>
-                                    <td>Flood Relief</td>
-                                    <td>Emergency Response</td>
-                                    <td><span class="badge bg-success">Completed</span></td>
+                                <tr th:each="donation : ${donations}">
+                                    <td th:text="${#temporals.format(donation.date, 'yyyy-MM-dd')}">2023-06-15</td>
+                                    <td th:text="${'$' + #numbers.formatDecimal(donation.amount, 0, 'COMMA', 2, 'POINT')}">$150.00</td>
+                                    <td th:text="${donation.purpose}">Flood Relief</td>
+                                    <td th:text="${donation.project}">Emergency Response</td>
+                                    <td><span class="badge" th:classappend="${donation.status == 'COMPLETED' ? 'bg-success' : 'bg-warning'}" 
+                                            th:text="${donation.status}">Completed</span></td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-primary">
+                                        <button class="btn btn-sm btn-outline-primary" th:onclick="'downloadReceipt(\'' + ${donation.id} + '\')'">
                                             <i class="fas fa-download me-1"></i>Download
                                         </button>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#viewDetailsModal">
+                                        <button class="btn btn-sm btn-info me-1" th:onclick="'viewDetails(\'' + ${donation.id} + '\')'">
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-primary">
+                                        <button class="btn btn-sm btn-primary" th:onclick="'refreshDonation(\'' + ${donation.id} + '\')'">
                                             <i class="fas fa-sync-alt"></i>
                                         </button>
                                     </td>
                                 </tr>
-                                <!-- Add more donation history rows -->
                             </tbody>
                         </table>
                     </div>
@@ -299,7 +299,9 @@
                     <h5 class="mb-0">Monthly Donation Trends</h5>
                 </div>
                 <div class="card-body">
-                    <canvas id="monthlyDonationChart" height="300"></canvas>
+                    <div style="height: 300px; width: 100%;">
+                        <canvas id="monthlyDonationChart"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -396,11 +398,11 @@
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                labels: /*[[${monthlyLabels}]]*/ ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 datasets: [
                     {
                         label: 'Donations ($)',
-                        data: [200, 350, 280, 450, 300, 150, 400, 500, 450, 400, 300, 250],
+                        data: /*[[${monthlyAmounts}]]*/ [200, 350, 280, 450, 300, 150, 400, 500, 450, 400, 300, 250],
                         borderColor: '#0d6efd',
                         backgroundColor: 'rgba(13, 110, 253, 0.1)',
                         borderWidth: 2,
@@ -409,7 +411,7 @@
                     },
                     {
                         label: 'Number of Donations',
-                        data: [2, 3, 2, 4, 3, 1, 3, 4, 3, 3, 2, 2],
+                        data: /*[[${monthlyCounts}]]*/ [2, 3, 2, 4, 3, 1, 3, 4, 3, 3, 2, 2],
                         borderColor: '#198754',
                         backgroundColor: 'rgba(25, 135, 84, 0.1)',
                         borderWidth: 2,
@@ -421,6 +423,7 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 interaction: {
                     intersect: false,
                     mode: 'index'
@@ -430,7 +433,8 @@
                         position: 'top',
                         labels: {
                             usePointStyle: true,
-                            padding: 20
+                            padding: 15,
+                            boxWidth: 8
                         }
                     },
                     tooltip: {
@@ -458,12 +462,16 @@
                         title: {
                             display: true,
                             text: 'Amount ($)',
-                            color: '#0d6efd'
+                            color: '#0d6efd',
+                            font: {
+                                size: 12
+                            }
                         },
                         ticks: {
                             callback: function(value) {
                                 return '$' + value;
-                            }
+                            },
+                            maxTicksLimit: 6
                         }
                     },
                     y1: {
@@ -473,15 +481,50 @@
                         title: {
                             display: true,
                             text: 'Number of Donations',
-                            color: '#198754'
+                            color: '#198754',
+                            font: {
+                                size: 12
+                            }
                         },
                         grid: {
                             drawOnChartArea: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 6
                         }
                     }
                 }
             }
         });
+
+        // Function to download receipt
+        function downloadReceipt(donationId) {
+            window.location.href = `/api/donations/${donationId}/receipt`;
+        }
+
+        // Function to view donation details
+        function viewDetails(donationId) {
+            window.location.href = `/donor/donation/${donationId}`;
+        }
+
+        // Function to refresh donation status
+        function refreshDonation(donationId) {
+            fetch(`/api/donations/${donationId}/refresh`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Failed to refresh donation status');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error refreshing donation status');
+            });
+        }
     </script>
 </body>
 </html> 

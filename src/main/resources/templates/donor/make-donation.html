@@ -199,121 +199,17 @@
                 <h1 class="h2"><i class="fas fa-hand-holding-heart me-2"></i>Make a Donation</h1>
             </div>
 
-            <!-- Donation Form -->
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="card donation-card">
-                        <div class="card-body">
-                            <form>
-                                <!-- Donation Amount -->
-                                <div class="mb-4">
-                                    <h5>Select Amount</h5>
-                                    <div class="btn-group mb-3" role="group">
-                                        <input type="radio" class="btn-check" name="amount" id="amount1" value="10">
-                                        <label class="btn btn-outline-primary" for="amount1">$10</label>
-
-                                        <input type="radio" class="btn-check" name="amount" id="amount2" value="25">
-                                        <label class="btn btn-outline-primary" for="amount2">$25</label>
-
-                                        <input type="radio" class="btn-check" name="amount" id="amount3" value="50">
-                                        <label class="btn btn-outline-primary" for="amount3">$50</label>
-
-                                        <input type="radio" class="btn-check" name="amount" id="amount4" value="100">
-                                        <label class="btn btn-outline-primary" for="amount4">$100</label>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Custom Amount</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text">$</span>
-                                            <input type="number" class="form-control" placeholder="Enter amount">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Donation Purpose -->
-                                <div class="mb-4">
-                                    <h5>Select Purpose</h5>
-                                    <select class="form-select mb-3">
-                                        <option selected>Choose donation purpose</option>
-                                        <option>Flood Relief</option>
-                                        <option>Medical Supplies</option>
-                                        <option>Food & Water</option>
-                                        <option>Emergency Shelter</option>
-                                    </select>
-                                </div>
-
-                                <!-- Payment Information -->
-                                <div class="mb-4">
-                                    <h5>Payment Information</h5>
-                                    <div class="mb-3">
-                                        <label class="form-label">Card Number</label>
-                                        <input type="text" class="form-control" placeholder="1234 5678 9012 3456">
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label">Expiry Date</label>
-                                            <input type="text" class="form-control" placeholder="MM/YY">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label">CVV</label>
-                                            <input type="text" class="form-control" placeholder="123">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Additional Information -->
-                                <div class="mb-4">
-                                    <h5>Additional Information</h5>
-                                    <div class="mb-3">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="anonymous">
-                                            <label class="form-check-label" for="anonymous">
-                                                Make this donation anonymous
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Message (Optional)</label>
-                                        <textarea class="form-control" rows="3" placeholder="Add a message with your donation"></textarea>
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary btn-lg w-100">
-                                    <i class="fas fa-heart me-2"></i>Complete Donation
+            <!-- Simplified Donation Section -->
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card donation-card text-center">
+                        <div class="card-body py-5">
+                            <i class="fas fa-heart text-primary mb-4" style="font-size: 48px;"></i>
+                            <h3 class="mb-4">Support Disaster Relief Efforts</h3>
+                            <p class="text-muted mb-4">Your contribution helps us provide immediate assistance to those affected by disasters.</p>
+                            <button id="pay-button" class="btn btn-primary btn-lg px-5">
+                                <i class="fas fa-hand-holding-heart me-2"></i>Pay Now
                                 </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Donation Summary -->
-                <div class="col-md-4">
-                    <div class="card donation-card">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">Donation Summary</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between mb-3">
-                                <span>Amount:</span>
-                                <strong>$0.00</strong>
-                            </div>
-                            <div class="d-flex justify-content-between mb-3">
-                                <span>Processing Fee:</span>
-                                <strong>$0.00</strong>
-                            </div>
-                            <hr>
-                            <div class="d-flex justify-content-between mb-3">
-                                <span>Total:</span>
-                                <strong class="text-primary">$0.00</strong>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Security Notice -->
-                    <div class="card mt-3">
-                        <div class="card-body">
-                            <h6><i class="fas fa-shield-alt me-2"></i>Secure Donation</h6>
-                            <p class="small text-muted mb-0">Your payment information is encrypted and secure. We never store your credit card details.</p>
                         </div>
                     </div>
                 </div>
@@ -366,12 +262,43 @@
                 </div>
             </div>
         </footer>
-    
-    
     </main>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script th:src="@{/js/scripts.js}"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        document.getElementById('pay-button').onclick = function() {
+            fetch('http://localhost:8080/api/payments/create-order?amount=1000&currency=INR', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(order => {
+                const options = {
+                    key: "rzp_test_CGqKb3lE3nPt0z", // Replace with your Razorpay API Key
+                    amount: order.amount,
+                    currency: order.currency,
+                    name: "Disaster Relief Platform",
+                    description: "Test Transaction",
+                    order_id: order.id,
+                    handler: function(response) {
+                        alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+                        // Redirect to donation history after successful payment
+                        window.location.href = '/donor/donation-history';
+                    },
+                    theme: {
+                        color: "#0d6efd"
+                    }
+                };
+                const rzp = new Razorpay(options);
+                rzp.open();
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Failed to create order. Please try again.');
+            });
+        };
+    </script>
 </body>
 </html> 

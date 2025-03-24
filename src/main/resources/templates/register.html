@@ -356,22 +356,22 @@
                     }
 
                     // Validate form
-                    if (!form.checkValidity()) {
-                        form.reportValidity();
-                        return;
-                    }
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
 
                     // Get form values
                     const password = document.getElementById('password')?.value;
                     const confirmPassword = document.getElementById('confirmPassword')?.value;
                     const termsCheck = document.getElementById('termsCheck');
-
-                    // Validate password match
-                    if (password !== confirmPassword) {
-                        showAlert('Passwords do not match');
-                        return;
-                    }
-
+            
+            // Validate password match
+            if (password !== confirmPassword) {
+                showAlert('Passwords do not match');
+                return;
+            }
+            
                     // Validate terms checkbox
                     if (termsCheck && !termsCheck.checked) {
                         showAlert('Please agree to the terms and conditions');
@@ -391,10 +391,10 @@
                     console.log('Sending registration request:', requestData);
 
                     const response = await fetch('/api/auth/signup', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                         body: JSON.stringify(requestData)
                     });
 
@@ -416,9 +416,9 @@
 
                     showSuccess('Registration successful! Redirecting to login...');
 
-                    setTimeout(() => {
-                        window.location.href = '/login';
-                    }, 2000);
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 2000);
 
                 } catch (error) {
                     console.error('Registration error:', error);
@@ -430,9 +430,9 @@
                         submitButton.innerHTML = '<i class="fas fa-user-plus me-2"></i>Create Account';
                     }
                 }
-            }
-
-            function showAlert(message) {
+        }
+        
+        function showAlert(message) {
                 if (alertMessage && successMessage) {
                     alertMessage.innerHTML = `
                         <i class="fas fa-exclamation-circle me-2"></i>
@@ -458,4 +458,4 @@
         });
     </script>
 </body>
-</html>
+</html> 
