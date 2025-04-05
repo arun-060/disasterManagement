@@ -33,6 +33,44 @@
         .dashboard-card:hover {
             transform: translateY(-5px);
         }
+        .footer {
+            background: #ffffff;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .footer-content {
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+
+        .quick-stats .stat-value {
+            color: #2563eb;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .border-end {
+            width: 1px;
+            height: 40px;
+            background: #e5e7eb;
+        }
+
+        .footer a:hover {
+            color: #2563eb !important;
+        }
+
+        @media (max-width: 992px) {
+            .footer-content .row > div {
+                text-align: center;
+            }
+            
+            .footer-content .row > div:not(:last-child) {
+                margin-bottom: 20px;
+            }
+
+            .d-flex {
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -82,37 +120,37 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" th:href="@{/admin/users}">
                                 <i class="fas fa-users me-2"></i>
                                 Users
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" th:href="@{/admin/disasters}">
                                 <i class="fas fa-exclamation-triangle me-2"></i>
                                 Disasters
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" th:href="@{/admin/relief-efforts}">
                                 <i class="fas fa-hands-helping me-2"></i>
                                 Relief Efforts
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" th:href="@{/admin/donations}">
                                 <i class="fas fa-donate me-2"></i>
                                 Donations
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" th:href="@{/admin/reports}">
                                 <i class="fas fa-chart-bar me-2"></i>
                                 Reports
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" th:href="@{/admin/settings}">
                                 <i class="fas fa-cog me-2"></i>
                                 Settings
                             </a>
@@ -254,8 +292,50 @@
                 </div>
 
                 <!-- Footer -->
-                <footer class="pt-3 mt-4 text-muted border-top">
-                    <p>&copy; 2023 Disaster Relief Platform. All rights reserved.</p>
+                <footer class="footer mt-5">
+                    <div class="footer-content border-top pt-4 pb-4">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-lg-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-hands-helping text-primary me-2 fa-2x"></i>
+                                    <h5 class="mb-0 fw-bold">Disaster Relief Platform</h5>
+                                </div>
+                                <p class="text-muted mb-0">Empowering communities through rapid disaster response and relief coordination.</p>
+                            </div>
+                            
+                            <div class="col-lg-4">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <div class="quick-stats text-center px-3">
+                                        <div class="stat-value text-primary fw-bold h4 mb-1">24/7</div>
+                                        <div class="stat-label text-muted small">Support</div>
+                                    </div>
+                                    <div class="border-end"></div>
+                                    <div class="quick-stats text-center px-3">
+                                        <div class="stat-value text-primary fw-bold h4 mb-1">100+</div>
+                                        <div class="stat-label text-muted small">Communities</div>
+                                    </div>
+                                    <div class="border-end"></div>
+                                    <div class="quick-stats text-center px-3">
+                                        <div class="stat-value text-primary fw-bold h4 mb-1">50K+</div>
+                                        <div class="stat-label text-muted small">Lives Impacted</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <div class="d-flex justify-content-end align-items-center gap-3">
+                                    <a href="#" class="text-muted text-decoration-none small">Privacy Policy</a>
+                                    <span class="text-muted">|</span>
+                                    <a href="#" class="text-muted text-decoration-none small">Terms of Service</a>
+                                    <span class="text-muted">|</span>
+                                    <a href="#" class="text-muted text-decoration-none small">Contact</a>
+                                </div>
+                                <div class="text-end mt-2">
+                                    <p class="text-muted small mb-0">&copy; 2024 Disaster Relief Platform. All rights reserved.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </footer>
             </main>
         </div>

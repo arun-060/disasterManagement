@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Disaster Relief Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .navbar {
+            z-index: 1030;
+            height: 56px;
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+        }
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #343a40;
+            color: white;
+            position: fixed;
+            top: 56px;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 0;
+            width: 16.67%;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+        }
+        .sidebar .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar .nav-link.active {
+            color: white;
+            background-color: #007bff;
+        }
+        main {
+            margin-left: 16.67%;
+            padding-top: 56px;
+        }
+        .settings-card {
+            transition: transform 0.3s;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .settings-card:hover {
+            transform: translateY(-5px);
+        }
+        /* Layout structure styles */
+body {
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    z-index: 1030;
+    height: 56px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+}
+
+.sidebar {
+    min-height: calc(100vh - 56px);
+    background-color: #343a40;
+    color: white;
+    position: fixed;
+    top: 56px;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 0;
+    width: 16.67%;
+}
+
+main {
+    margin-left: 16.67%;
+    padding-top: 56px;
+    min-height: calc(100vh - 56px);
+    display: flex;
+    flex-direction: column;
+}
+
+.container-fluid {
+    flex: 1 0 auto;
+}
+
+/* Footer specific styles */
+.footer {
+    margin-top: auto;
+    background: #ffffff;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.03);
+    width: 100%;
+}
+
+.footer-content {
+    padding: 24px;
+}
+
+.quick-stats .stat-value {
+    color: #2563eb;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.border-end {
+    width: 1px;
+    height: 40px;
+    background: #e5e7eb;
+}
+
+.footer a:hover {
+    color: #2563eb !important;
+}
+
+@media (max-width: 992px) {
+    .footer-content .row > div {
+        text-align: center;
+    }
+    
+    .footer-content .row > div:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    .d-flex {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        margin-left: 0;
+    }
+    .sidebar {
+        position: static;
+        width: 100%;
+    }
+}
+
+        @media (max-width: 768px) {
+            main {
+                margin-left: 0;
+            }
+            .sidebar {
+                position: static;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="fas fa-hands-helping me-2"></i>
+                Disaster Relief Platform
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+                                </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> <span sec:authentication="name">Username</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" style="display: none;" id="logoutForm"></form>
+                                <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit();">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="position-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/dashboard}">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/users}">
+                        <i class="fas fa-users me-2"></i>
+                        Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/disasters}">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Disasters
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/relief-efforts}">
+                        <i class="fas fa-hands-helping me-2"></i>
+                        Relief Efforts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/donations}">
+                        <i class="fas fa-donate me-2"></i>
+                        Donations
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/reports}">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Reports
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/admin/settings}">
+                        <i class="fas fa-cog me-2"></i>
+                        Settings
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="px-md-4">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2"><i class="fas fa-cog me-2"></i>System Settings</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Changes
+                    </button>
+                </div>
+            </div>
+
+            <!-- Settings Sections -->
+            <div class="row">
+                            <!-- General Settings -->
+                <div class="col-md-6 mb-4">
+                    <div class="card settings-card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-sliders-h me-2"></i>General Settings</h5>
+                        </div>
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="mb-3">
+                                                <label class="form-label">Platform Name</label>
+                                                <input type="text" class="form-control" value="Disaster Relief Platform">
+                                            </div>
+                                            <div class="mb-3">
+                                    <label class="form-label">Contact Email</label>
+                                                <input type="email" class="form-control" value="admin@example.com">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Time Zone</label>
+                                                <select class="form-select">
+                                                    <option>UTC</option>
+                                                    <option>EST</option>
+                                                    <option>PST</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                    <label class="form-label">Language</label>
+                                                <select class="form-select">
+                                        <option>English</option>
+                                        <option>Spanish</option>
+                                        <option>French</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                <!-- Notification Settings -->
+                <div class="col-md-6 mb-4">
+                    <div class="card settings-card">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-bell me-2"></i>Notification Settings</h5>
+                        </div>
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" checked>
+                                        <label class="form-check-label">Email Notifications</label>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" checked>
+                                        <label class="form-check-label">SMS Alerts</label>
+                                    </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" checked>
+                                        <label class="form-check-label">System Alerts</label>
+                                                </div>
+                                            </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Alert Frequency</label>
+                                    <select class="form-select">
+                                        <option>Immediately</option>
+                                        <option>Daily Digest</option>
+                                        <option>Weekly Summary</option>
+                                    </select>
+                                </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                <!-- Security Settings -->
+                <div class="col-md-6 mb-4">
+                    <div class="card settings-card">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Security Settings</h5>
+                        </div>
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" checked>
+                                        <label class="form-check-label">Two-Factor Authentication</label>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                    <label class="form-label">Session Timeout (minutes)</label>
+                                    <input type="number" class="form-control" value="30">
+                                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password Policy</label>
+                                    <select class="form-select">
+                                        <option>Strong</option>
+                                        <option>Medium</option>
+                                        <option>Basic</option>
+                                    </select>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                <!-- Backup Settings -->
+                <div class="col-md-6 mb-4">
+                    <div class="card settings-card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-database me-2"></i>Backup Settings</h5>
+                        </div>
+                                    <div class="card-body">
+                            <form>
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" checked>
+                                        <label class="form-check-label">Automatic Backups</label>
+                                    </div>
+                                            </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Backup Frequency</label>
+                                    <select class="form-select">
+                                                <option>Daily</option>
+                                                <option>Weekly</option>
+                                                <option>Monthly</option>
+                                            </select>
+                                        </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Retention Period (days)</label>
+                                    <input type="number" class="form-control" value="30">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer th:fragment="footer" class="footer">
+            <div class="footer-content border-top pt-4 pb-4">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-hands-helping text-primary me-2 fa-2x"></i>
+                            <h5 class="mb-0 fw-bold">Disaster Relief Platform</h5>
+                        </div>
+                        <p class="text-muted mb-0">Empowering communities through rapid disaster response and relief coordination.</p>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="d-flex justify-content-center gap-3">
+                            <div class="quick-stats text-center px-3">
+                                <div class="stat-value text-primary fw-bold h4 mb-1">24/7</div>
+                                <div class="stat-label text-muted small">Support</div>
+                            </div>
+                            <div class="border-end"></div>
+                            <div class="quick-stats text-center px-3">
+                                <div class="stat-value text-primary fw-bold h4 mb-1">100+</div>
+                                <div class="stat-label text-muted small">Communities</div>
+                            </div>
+                            <div class="border-end"></div>
+                            <div class="quick-stats text-center px-3">
+                                <div class="stat-value text-primary fw-bold h4 mb-1">50K+</div>
+                                <div class="stat-label text-muted small">Lives Impacted</div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-lg-4">
+                        <div class="d-flex justify-content-end align-items-center gap-3">
+                            <a href="#" class="text-muted text-decoration-none small">Privacy Policy</a>
+                            <span class="text-muted">|</span>
+                            <a href="#" class="text-muted text-decoration-none small">Terms of Service</a>
+                            <span class="text-muted">|</span>
+                            <a href="#" class="text-muted text-decoration-none small">Contact</a>
+                        </div>
+                        <div class="text-end mt-2">
+                            <p class="text-muted small mb-0">&copy; 2024 Disaster Relief Platform. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>    
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>

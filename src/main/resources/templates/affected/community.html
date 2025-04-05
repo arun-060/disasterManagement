@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Support - Disaster Relief Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .navbar {
+            z-index: 1030;
+            height: 56px;
+        }
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #343a40;
+            color: white;
+            position: fixed;
+            top: 56px;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 0;
+            width: 16.67%;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+        }
+        .sidebar .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar .nav-link.active {
+            color: white;
+            background-color: #007bff;
+        }
+        main {
+            margin-left: 16.67%;
+            padding-top: 56px;
+        }
+        .community-stats {
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .post-card {
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s;
+        }
+        .post-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+        }
+        /* Layout structure styles */
+body {
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    z-index: 1030;
+    height: 56px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+}
+
+.sidebar {
+    min-height: calc(100vh - 56px);
+    background-color: #343a40;
+    color: white;
+    position: fixed;
+    top: 56px;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 0;
+    width: 16.67%;
+}
+
+main {
+    margin-left: 16.67%;
+    padding-top: 56px;
+    min-height: calc(100vh - 56px);
+    display: flex;
+    flex-direction: column;
+}
+
+.container-fluid {
+    flex: 1 0 auto;
+}
+
+/* Footer specific styles */
+.footer {
+    margin-top: auto;
+    background: #ffffff;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.03);
+    width: 100%;
+}
+
+.footer-content {
+    padding: 24px;
+}
+
+.quick-stats .stat-value {
+    color: #2563eb;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.border-end {
+    width: 1px;
+    height: 40px;
+    background: #e5e7eb;
+}
+
+.footer a:hover {
+    color: #2563eb !important;
+}
+
+@media (max-width: 992px) {
+    .footer-content .row > div {
+        text-align: center;
+    }
+    
+    .footer-content .row > div:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    .d-flex {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        margin-left: 0;
+    }
+    .sidebar {
+        position: static;
+        width: 100%;
+    }
+}
+        @media (max-width: 768px) {
+            main {
+                margin-left: 0;
+            }
+            .sidebar {
+                position: static;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-hands-helping me-2"></i>
+                Disaster Relief Platform
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> <span sec:authentication="name">Username</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" th:href="@{/affected/profile}"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" style="display: none;" id="logoutForm"></form>
+                                <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit();">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="position-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/affected/dashboard}">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/affected/request-assistance}">
+                        <i class="fas fa-hand-holding-heart me-2"></i>
+                        Request Assistance
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/affected/my-requests}">
+                        <i class="fas fa-clipboard-list me-2"></i>
+                        My Requests
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/affected/alerts}">
+                        <i class="fas fa-bell me-2"></i>
+                        Alerts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/affected/community}">
+                        <i class="fas fa-users me-2"></i>
+                        Community Support
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/affected/profile}">
+                        <i class="fas fa-user me-2"></i>
+                        Profile
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="px-md-4">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Community Support</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Create Post
+                    </button>
+                </div>
+            </div>
+
+            <!-- Community Statistics -->
+            <div class="community-stats mb-4">
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <h3>1,234</h3>
+                        <p class="mb-0">Community Members</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h3>56</h3>
+                        <p class="mb-0">Active Discussions</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h3>789</h3>
+                        <p class="mb-0">Resources Shared</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create New Post -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Create New Post</h5>
+                    <form>
+                        <div class="mb-3">
+                            <textarea class="form-control" rows="3" placeholder="Share your thoughts, questions, or resources..."></textarea>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <button type="button" class="btn btn-outline-primary me-2">
+                                    <i class="fas fa-image me-1"></i> Add Photo
+                                </button>
+                                <button type="button" class="btn btn-outline-primary">
+                                    <i class="fas fa-paperclip me-1"></i> Attach
+                                </button>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Post</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Posts Feed -->
+            <div class="posts-feed">
+                <!-- Sample Post 1 -->
+                <div class="card post-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User Avatar">
+                            <div>
+                                <h6 class="mb-0">Jane Smith</h6>
+                                <small class="text-muted">Posted 2 hours ago</small>
+                            </div>
+                        </div>
+                        <p class="card-text">Sharing information about available shelter spaces at the Community Center. Currently 20 spots available. Contact: (555) 123-4567</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary me-2">
+                                    <i class="fas fa-heart me-1"></i> Like
+                                </button>
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-comment me-1"></i> Comment
+                                </button>
+                            </div>
+                            <small class="text-muted">15 likes · 3 comments</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Post 2 -->
+                <div class="card post-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User Avatar">
+                            <div>
+                                <h6 class="mb-0">John Doe</h6>
+                                <small class="text-muted">Posted 4 hours ago</small>
+                            </div>
+                        </div>
+                        <p class="card-text">Looking for volunteers to help distribute supplies at the Main Street relief center tomorrow morning. Please comment if you can help!</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary me-2">
+                                    <i class="fas fa-heart me-1"></i> Like
+                                </button>
+                                <button class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-comment me-1"></i> Comment
+                                </button>
+                            </div>
+                            <small class="text-muted">8 likes · 12 comments</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer th:fragment="footer" class="footer">
+            <div class="footer-content border-top pt-4 pb-4">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-hands-helping text-primary me-2 fa-2x"></i>
+                            <h5 class="mb-0 fw-bold">Disaster Relief Platform</h5>
+                        </div>
+                        <p class="text-muted mb-0">Empowering communities through rapid disaster response and relief coordination.</p>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="d-flex justify-content-center gap-3">
+                            <div class="quick-stats text-center px-3">
+                                <div class="stat-value text-primary fw-bold h4 mb-1">24/7</div>
+                                <div class="stat-label text-muted small">Support</div>
+                            </div>
+                            <div class="border-end"></div>
+                            <div class="quick-stats text-center px-3">
+                                <div class="stat-value text-primary fw-bold h4 mb-1">100+</div>
+                                <div class="stat-label text-muted small">Communities</div>
+                            </div>
+                            <div class="border-end"></div>
+                            <div class="quick-stats text-center px-3">
+                                <div class="stat-value text-primary fw-bold h4 mb-1">50K+</div>
+                                <div class="stat-label text-muted small">Lives Impacted</div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-lg-4">
+                        <div class="d-flex justify-content-end align-items-center gap-3">
+                            <a href="#" class="text-muted text-decoration-none small">Privacy Policy</a>
+                            <span class="text-muted">|</span>
+                            <a href="#" class="text-muted text-decoration-none small">Terms of Service</a>
+                            <span class="text-muted">|</span>
+                            <a href="#" class="text-muted text-decoration-none small">Contact</a>
+                        </div>
+                        <div class="text-end mt-2">
+                            <p class="text-muted small mb-0">&copy; 2024 Disaster Relief Platform. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>    
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/scripts.js}"></script>
+</body>
+</html> 

@@ -39,6 +39,57 @@
         .disaster-card:hover {
             transform: translateY(-5px);
         }
+        /* Footer specific styles */
+.footer {
+    margin-top: auto;
+    background: #ffffff;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.03);
+    width: 100%;
+}
+
+.footer-content {
+    padding: 24px;
+}
+
+.quick-stats .stat-value {
+    color: #2563eb;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.border-end {
+    width: 1px;
+    height: 40px;
+    background: #e5e7eb;
+}
+
+.footer a:hover {
+    color: #2563eb !important;
+}
+
+@media (max-width: 992px) {
+    .footer-content .row > div {
+        text-align: center;
+    }
+    
+    .footer-content .row > div:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    .d-flex {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        margin-left: 0;
+    }
+    .sidebar {
+        position: static;
+        width: 100%;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -82,37 +133,37 @@
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">
+                            <a class="nav-link active" th:href="@{/donor/dashboard}">
                                 <i class="fas fa-tachometer-alt me-2"></i>
                                 Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" th:href="@{/donor/make-donation}">
                                 <i class="fas fa-donate me-2"></i>
                                 Make Donation
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" th:href="@{/donor/donation-history}">
                                 <i class="fas fa-history me-2"></i>
                                 Donation History
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" th:href="@{/donor/active-disasters}">
                                 <i class="fas fa-exclamation-triangle me-2"></i>
                                 Active Disasters
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" th:href="@{/donor/impact-reports}">
                                 <i class="fas fa-chart-pie me-2"></i>
                                 Impact Reports
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" th:href="@{/donor/profile}">
                                 <i class="fas fa-user me-2"></i>
                                 Profile
                             </a>
@@ -126,7 +177,7 @@
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2"><i class="fas fa-tachometer-alt me-2"></i>Donor Dashboard</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
-                        <a href="#" class="btn btn-primary">
+                        <a th:href="@{/donor/make-donation}" class="btn btn-primary">
                             <i class="fas fa-donate me-2"></i>Make a Donation
                         </a>
                     </div>
@@ -176,51 +227,81 @@
                 </div>
 
                 <!-- Active Disasters -->
-                <h3 class="mb-3">Active Disasters Needing Support</h3>
-                <div class="row mb-4">
-                    <div class="col-md-4 mb-3">
-                        <div class="card disaster-card h-100">
-                            <img src="https://via.placeholder.com/300x150?text=Flood" class="card-img-top" alt="Flood">
-                            <div class="card-body">
-                                <h5 class="card-title">Flood Relief - Southeast Asia</h5>
-                                <div class="progress mb-3">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
-                                </div>
-                                <p class="card-text">$75,000 raised of $100,000 goal</p>
-                                <p class="card-text"><small class="text-muted">Urgent need for clean water and medical supplies</small></p>
-                                <a href="#" class="btn btn-primary">Donate Now</a>
-                            </div>
+                <!-- Replace the Active Disasters section with this updated version -->
+
+<!-- Active Disasters -->
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Active Disasters</h5>
+        <a th:href="@{/donor/active-disasters}" class="btn btn-sm btn-primary">View All</a>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <!-- Disaster 1 - Flood Emergency -->
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <img src="https://cdn.pixabay.com/photo/2018/09/27/23/34/water-3708190_1280.jpg" 
+                         class="card-img-top" 
+                         alt="Flood Disaster"
+                         style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Flood Emergency</h5>
+                        <p class="card-text">Severe flooding affecting coastal regions. Immediate assistance needed.</p>
+                        <div class="progress mb-3" style="height: 5px;">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 75%"></div>
                         </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="card disaster-card h-100">
-                            <img src="https://via.placeholder.com/300x150?text=Earthquake" class="card-img-top" alt="Earthquake">
-                            <div class="card-body">
-                                <h5 class="card-title">Earthquake Response - Central America</h5>
-                                <div class="progress mb-3">
-                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 45%;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">45%</div>
-                                </div>
-                                <p class="card-text">$45,000 raised of $100,000 goal</p>
-                                <p class="card-text"><small class="text-muted">Need for shelter and reconstruction assistance</small></p>
-                                <a href="#" class="btn btn-primary">Donate Now</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="card disaster-card h-100">
-                            <img src="https://via.placeholder.com/300x150?text=Wildfire" class="card-img-top" alt="Wildfire">
-                            <div class="card-body">
-                                <h5 class="card-title">Wildfire Recovery - Western Region</h5>
-                                <div class="progress mb-3">
-                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-                                </div>
-                                <p class="card-text">$25,000 raised of $100,000 goal</p>
-                                <p class="card-text"><small class="text-muted">Support needed for displaced families</small></p>
-                                <a href="#" class="btn btn-primary">Donate Now</a>
-                            </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">$75,000 raised</small>
+                            <a th:href="@{/donor/make-donation}" class="btn btn-sm btn-primary">Donate Now</a>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Disaster 2 - Earthquake Response -->
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <img src="https://img.freepik.com/free-photo/landscape-extreme-earthquake_23-2150879898.jpg" 
+                         class="card-img-top" 
+                         alt="Earthquake Relief"
+                         style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Earthquake Response</h5>
+                        <p class="card-text">7.2 magnitude earthquake has affected multiple cities.</p>
+                        <div class="progress mb-3" style="height: 5px;">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 45%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">$45,000 raised</small>
+                            <a th:href="@{/donor/make-donation}" class="btn btn-sm btn-primary">Donate Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Disaster 3 - Hurricane Recovery -->
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <img src="https://img.freepik.com/premium-photo/typhoon-planet-earth-elements-this-image-furnished-by-nasa_347169-39.jpg" 
+                         class="card-img-top" 
+                         alt="Hurricane Relief"
+                         style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">Hurricane Recovery</h5>
+                        <p class="card-text">Category 4 hurricane devastates coastal communities.</p>
+                        <div class="progress mb-3" style="height: 5px;">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 60%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">$60,000 raised</small>
+                            <a th:href="@{/donor/make-donation}" class="btn btn-sm btn-primary">Donate Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
                 <!-- Recent Donations -->
                 <div class="card mb-4">
@@ -276,9 +357,53 @@
                 </div>
 
                 <!-- Footer -->
-                <footer class="pt-3 mt-4 text-muted border-top">
-                    <p>&copy; 2023 Disaster Relief Platform. All rights reserved.</p>
+                <footer th:fragment="footer" class="footer">
+                    <div class="footer-content border-top pt-4 pb-4">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-lg-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-hands-helping text-primary me-2 fa-2x"></i>
+                                    <h5 class="mb-0 fw-bold">Disaster Relief Platform</h5>
+                                </div>
+                                <p class="text-muted mb-0">Empowering communities through rapid disaster response and relief coordination.</p>
+                            </div>
+                            
+                            <div class="col-lg-4">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <div class="quick-stats text-center px-3">
+                                        <div class="stat-value text-primary fw-bold h4 mb-1">24/7</div>
+                                        <div class="stat-label text-muted small">Support</div>
+                                    </div>
+                                    <div class="border-end"></div>
+                                    <div class="quick-stats text-center px-3">
+                                        <div class="stat-value text-primary fw-bold h4 mb-1">100+</div>
+                                        <div class="stat-label text-muted small">Communities</div>
+                                    </div>
+                                    <div class="border-end"></div>
+                                    <div class="quick-stats text-center px-3">
+                                        <div class="stat-value text-primary fw-bold h4 mb-1">50K+</div>
+                                        <div class="stat-label text-muted small">Lives Impacted</div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <div class="col-lg-4">
+                                <div class="d-flex justify-content-end align-items-center gap-3">
+                                    <a href="#" class="text-muted text-decoration-none small">Privacy Policy</a>
+                                    <span class="text-muted">|</span>
+                                    <a href="#" class="text-muted text-decoration-none small">Terms of Service</a>
+                                    <span class="text-muted">|</span>
+                                    <a href="#" class="text-muted text-decoration-none small">Contact</a>
+                                </div>
+                                <div class="text-end mt-2">
+                                    <p class="text-muted small mb-0">&copy; 2024 Disaster Relief Platform. All rights reserved.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </footer>
+            
+            
             </main>
         </div>
     </div>

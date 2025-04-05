@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation History - Disaster Relief Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .navbar {
+            z-index: 1030;
+            height: 56px;
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+        }
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #343a40;
+            color: white;
+            position: fixed;
+            top: 56px;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 0;
+            width: 16.67%;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+        }
+        .sidebar .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar .nav-link.active {
+            color: white;
+            background-color: #007bff;
+        }
+        main {
+            margin-left: 16.67%;
+            padding-top: 56px;
+        }
+        .history-card {
+            transition: transform 0.3s;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .history-card:hover {
+            transform: translateY(-5px);
+        }
+        /* Footer specific styles */
+.footer {
+    margin-top: auto;
+    background: #ffffff;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.03);
+    width: 100%;
+}
+
+.footer-content {
+    padding: 24px;
+}
+
+.quick-stats .stat-value {
+    color: #2563eb;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.border-end {
+    width: 1px;
+    height: 40px;
+    background: #e5e7eb;
+}
+
+.footer a:hover {
+    color: #2563eb !important;
+}
+
+@media (max-width: 992px) {
+    .footer-content .row > div {
+        text-align: center;
+    }
+    
+    .footer-content .row > div:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    .d-flex {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        margin-left: 0;
+    }
+    .sidebar {
+        position: static;
+        width: 100%;
+    }
+}
+
+        @media (max-width: 768px) {
+            main {
+                margin-left: 0;
+            }
+            .sidebar {
+                position: static;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="fas fa-hands-helping me-2"></i>
+                Disaster Relief Platform
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> <span sec:authentication="name">Username</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                                <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="position-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/donor/dashboard}">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/donor/make-donation}">
+                        <i class="fas fa-hand-holding-heart me-2"></i>
+                        Make Donation
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/donor/donation-history}">
+                        <i class="fas fa-history me-2"></i>
+                        Donation History
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/donor/active-disasters}">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Active Disasters
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/donor/impact-reports}">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Impact Reports
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/donor/profile}">
+                        <i class="fas fa-user me-2"></i>
+                        Profile
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="px-md-4">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2"><i class="fas fa-history me-2"></i>Donation History</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-download me-2"></i>Export
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-print me-2"></i>Print
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Donation Statistics -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card history-card bg-primary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Donated</h5>
+                            <h2 th:text="${totalDonated != null ? '$' + #numbers.formatDecimal(totalDonated, 0, 'COMMA', 0, 'POINT') : '$0'}">$0</h2>
+                            <p class="mb-0">Lifetime contributions</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card history-card bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Projects Supported</h5>
+                            <h2 th:text="${projectsSupported != null ? projectsSupported : '0'}">0</h2>
+                            <p class="mb-0">Relief efforts</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card history-card bg-info text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Last Donation</h5>
+                            <h2 th:text="${lastDonation != null ? '$' + #numbers.formatDecimal(lastDonation, 0, 'COMMA', 0, 'POINT') : '$0'}">$0</h2>
+                            <p class="mb-0" th:text="${lastDonationDate != null ? lastDonationDate : 'No donations yet'}">No donations yet</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card history-card bg-warning text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Tax Deductible</h5>
+                            <h2 th:text="${taxDeductible != null ? '$' + #numbers.formatDecimal(taxDeductible, 0, 'COMMA', 0, 'POINT') : '$0'}">$0</h2>
+                            <p class="mb-0">This year</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Donation History Table -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Purpose</th>
+                                    <th>Project</th>
+                                    <th>Status</th>
+                                    <th>Receipt</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="donation : ${donations}">
+                                    <td th:text="${#temporals.format(donation.date, 'yyyy-MM-dd')}">2023-06-15</td>
+                                    <td th:text="${'$' + #numbers.formatDecimal(donation.amount, 0, 'COMMA', 2, 'POINT')}">$150.00</td>
+                                    <td th:text="${donation.purpose}">Flood Relief</td>
+                                    <td th:text="${donation.project}">Emergency Response</td>
+                                    <td><span class="badge" th:classappend="${donation.status == 'COMPLETED' ? 'bg-success' : 'bg-warning'}" 
+                                            th:text="${donation.status}">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary" th:onclick="'downloadReceipt(\'' + ${donation.id} + '\')'">
+                                            <i class="fas fa-download me-1"></i>Download
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info me-1" th:onclick="'viewDetails(\'' + ${donation.id} + '\')'">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-primary" th:onclick="'refreshDonation(\'' + ${donation.id} + '\')'">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Donation Chart -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Monthly Donation Trends</h5>
+                </div>
+                <div class="card-body">
+                    <div style="height: 300px; width: 100%;">
+                        <canvas id="monthlyDonationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Impact Summary -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Your Impact</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                                <h4>250</h4>
+                                <p class="text-muted">People Helped</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-globe fa-3x text-success mb-3"></i>
+                                <h4>5</h4>
+                                <p class="text-muted">Regions Supported</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-hand-holding-heart fa-3x text-danger mb-3"></i>
+                                <h4>12</h4>
+                                <p class="text-muted">Projects Funded</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer th:fragment="footer" class="footer">
+            <div class="footer-content border-top pt-4 pb-4">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-hands-helping text-primary me-2 fa-2x"></i>
+                            <h5 class="mb-0 fw-bold">Disaster Relief Platform</h5>
+                        </div>
+                        <p class="text-muted mb-0">Empowering communities through rapid disaster response and relief coordination.</p>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="d-flex justify-content-center gap-3">
+                            <div class="quick-stats text-center px-3">
+                                <div class="stat-value text-primary fw-bold h4 mb-1">24/7</div>
+                                <div class="stat-label text-muted small">Support</div>
+                            </div>
+                            <div class="border-end"></div>
+                            <div class="quick-stats text-center px-3">
+                                <div class="stat-value text-primary fw-bold h4 mb-1">100+</div>
+                                <div class="stat-label text-muted small">Communities</div>
+                            </div>
+                            <div class="border-end"></div>
+                            <div class="quick-stats text-center px-3">
+                                <div class="stat-value text-primary fw-bold h4 mb-1">50K+</div>
+                                <div class="stat-label text-muted small">Lives Impacted</div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-lg-4">
+                        <div class="d-flex justify-content-end align-items-center gap-3">
+                            <a href="#" class="text-muted text-decoration-none small">Privacy Policy</a>
+                            <span class="text-muted">|</span>
+                            <a href="#" class="text-muted text-decoration-none small">Terms of Service</a>
+                            <span class="text-muted">|</span>
+                            <a href="#" class="text-muted text-decoration-none small">Contact</a>
+                        </div>
+                        <div class="text-end mt-2">
+                            <p class="text-muted small mb-0">&copy; 2024 Disaster Relief Platform. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    
+    
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:src="@{/js/scripts.js}"></script>
+    <script>
+        // Monthly Donation Trends Chart
+        const ctx = document.getElementById('monthlyDonationChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: /*[[${monthlyLabels}]]*/ ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [
+                    {
+                        label: 'Donations ($)',
+                        data: /*[[${monthlyAmounts}]]*/ [200, 350, 280, 450, 300, 150, 400, 500, 450, 400, 300, 250],
+                        borderColor: '#0d6efd',
+                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Number of Donations',
+                        data: /*[[${monthlyCounts}]]*/ [2, 3, 2, 4, 3, 1, 3, 4, 3, 3, 2, 2],
+                        borderColor: '#198754',
+                        backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 15,
+                            boxWidth: 8
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.datasetIndex === 0) {
+                                    label += '$' + context.parsed.y;
+                                } else {
+                                    label += context.parsed.y + ' donations';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Amount ($)',
+                            color: '#0d6efd',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value;
+                            },
+                            maxTicksLimit: 6
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Number of Donations',
+                            color: '#198754',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 6
+                        }
+                    }
+                }
+            }
+        });
+
+        // Function to download receipt
+        function downloadReceipt(donationId) {
+            window.location.href = `/api/donations/${donationId}/receipt`;
+        }
+
+        // Function to view donation details
+        function viewDetails(donationId) {
+            window.location.href = `/donor/donation/${donationId}`;
+        }
+
+        // Function to refresh donation status
+        function refreshDonation(donationId) {
+            fetch(`/api/donations/${donationId}/refresh`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Failed to refresh donation status');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error refreshing donation status');
+            });
+        }
+    </script>
+</body>
+</html> 

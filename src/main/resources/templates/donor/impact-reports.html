@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impact Reports - Disaster Relief Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .navbar {
+            z-index: 1030;
+            height: 56px;
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+        }
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #343a40;
+            color: white;
+            position: fixed;
+            top: 56px;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 0;
+            width: 16.67%;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+        }
+        .sidebar .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar .nav-link.active {
+            color: white;
+            background-color: #007bff;
+        }
+        main {
+            margin-left: 16.67%;
+            padding-top: 56px;
+        }
+        .impact-card {
+            transition: transform 0.3s;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .impact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+        }
+        /* Footer specific styles */
+.footer {
+    margin-top: auto;
+    background: #ffffff;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.03);
+    width: 100%;
+}
+
+.footer-content {
+    padding: 24px;
+}
+
+.quick-stats .stat-value {
+    color: #2563eb;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.border-end {
+    width: 1px;
+    height: 40px;
+    background: #e5e7eb;
+}
+
+.footer a:hover {
+    color: #2563eb !important;
+}
+
+@media (max-width: 992px) {
+    .footer-content .row > div {
+        text-align: center;
+    }
+    
+    .footer-content .row > div:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    .d-flex {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        margin-left: 0;
+    }
+    .sidebar {
+        position: static;
+        width: 100%;
+    }
+}
+
+        @media (max-width: 768px) {
+            main {
+                margin-left: 0;
+            }
+            .sidebar {
+                position: static;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="fas fa-hands-helping me-2"></i>
+                Disaster Relief Platform
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> <span sec:authentication="name">Username</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                                <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="position-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/donor/dashboard}">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/donor/make-donation}">
+                        <i class="fas fa-hand-holding-heart me-2"></i>
+                        Make Donation
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/donor/donation-history}">
+                        <i class="fas fa-history me-2"></i>
+                        Donation History
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/donor/active-disasters}">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Active Disasters
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/donor/impact-reports}">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Impact Reports
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/donor/profile}">
+                        <i class="fas fa-user me-2"></i>
+                        Profile
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="px-md-4">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2"><i class="fas fa-chart-line me-2"></i>Impact Reports</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-download me-2"></i>Export
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-print me-2"></i>Print
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overall Impact Summary -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card impact-card bg-primary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Lives Impacted</h5>
+                            <h2>25,000+</h2>
+                            <p class="mb-0">People helped</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card impact-card bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Projects Completed</h5>
+                            <h2>45</h2>
+                            <p class="mb-0">Successfully delivered</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card impact-card bg-info text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Communities Served</h5>
+                            <h2>120</h2>
+                            <p class="mb-0">Regions supported</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card impact-card bg-warning text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Active Projects</h5>
+                            <h2>15</h2>
+                            <p class="mb-0">Ongoing initiatives</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Impact Visualization -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Donation Impact by Category</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="impactChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Geographic Distribution</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="geographicChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Impact Stories -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Impact Stories</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card impact-card h-100">
+                                <div class="card-body">
+                                    <div class="text-primary mb-3">
+                                        <i class="fas fa-hospital fa-2x"></i>
+                                    </div>
+                                    <h5 class="card-title">Emergency Medical Support</h5>
+                                    <p class="card-text">Provided critical medical supplies to 500+ families affected by the recent flood. Our medical teams worked around the clock to ensure immediate healthcare access.</p>
+                                    <div class="mt-3">
+                                        <span class="badge bg-success mb-2">500+ Families Helped</span>
+                                        <span class="badge bg-info mb-2">24/7 Medical Support</span>
+                                    </div>
+                                    <a href="#" class="btn btn-primary mt-2">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card impact-card h-100">
+                                <div class="card-body">
+                                    <div class="text-success mb-3">
+                                        <i class="fas fa-water fa-2x"></i>
+                                    </div>
+                                    <h5 class="card-title">Clean Water Initiative</h5>
+                                    <p class="card-text">Installed water purification systems serving 1000+ residents daily. Ensuring sustainable access to clean and safe drinking water for affected communities.</p>
+                                    <div class="mt-3">
+                                        <span class="badge bg-success mb-2">1000+ Daily Users</span>
+                                        <span class="badge bg-info mb-2">Sustainable Solution</span>
+                                    </div>
+                                    <a href="#" class="btn btn-primary mt-2">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card impact-card h-100">
+                                <div class="card-body">
+                                    <div class="text-warning mb-3">
+                                        <i class="fas fa-school fa-2x"></i>
+                                    </div>
+                                    <h5 class="card-title">Education Recovery</h5>
+                                    <p class="card-text">Rebuilt and equipped 5 schools, benefiting 2000+ students. Providing essential educational resources and safe learning environments.</p>
+                                    <div class="mt-3">
+                                        <span class="badge bg-success mb-2">5 Schools Rebuilt</span>
+                                        <span class="badge bg-info mb-2">2000+ Students</span>
+                                    </div>
+                                    <a href="#" class="btn btn-primary mt-2">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Reports Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Detailed Impact Reports</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Project</th>
+                                    <th>Location</th>
+                                    <th>Beneficiaries</th>
+                                    <th>Duration</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Medical Camp</td>
+                                    <td>Central Region</td>
+                                    <td>500+</td>
+                                    <td>3 months</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info me-1">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-primary">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Add more report rows as needed -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer th:fragment="footer" class="footer">
+            <div class="footer-content border-top pt-4 pb-4">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-hands-helping text-primary me-2 fa-2x"></i>
+                            <h5 class="mb-0 fw-bold">Disaster Relief Platform</h5>
+                        </div>
+                        <p class="text-muted mb-0">Empowering communities through rapid disaster response and relief coordination.</p>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="d-flex justify-content-center gap-3">
+                            <div class="quick-stats text-center px-3">
+                                <div class="stat-value text-primary fw-bold h4 mb-1">24/7</div>
+                                <div class="stat-label text-muted small">Support</div>
+                            </div>
+                            <div class="border-end"></div>
+                            <div class="quick-stats text-center px-3">
+                                <div class="stat-value text-primary fw-bold h4 mb-1">100+</div>
+                                <div class="stat-label text-muted small">Communities</div>
+                            </div>
+                            <div class="border-end"></div>
+                            <div class="quick-stats text-center px-3">
+                                <div class="stat-value text-primary fw-bold h4 mb-1">50K+</div>
+                                <div class="stat-label text-muted small">Lives Impacted</div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-lg-4">
+                        <div class="d-flex justify-content-end align-items-center gap-3">
+                            <a href="#" class="text-muted text-decoration-none small">Privacy Policy</a>
+                            <span class="text-muted">|</span>
+                            <a href="#" class="text-muted text-decoration-none small">Terms of Service</a>
+                            <span class="text-muted">|</span>
+                            <a href="#" class="text-muted text-decoration-none small">Contact</a>
+                        </div>
+                        <div class="text-end mt-2">
+                            <p class="text-muted small mb-0">&copy; 2024 Disaster Relief Platform. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    
+    
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:src="@{/js/scripts.js}"></script>
+
+    <!-- First, update the Impact Stories images -->
+    <script>
+        // Replace placeholder images with actual disaster relief images
+        const impactStoryImages = [
+            'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=300', // Medical support image
+            'https://images.unsplash.com/photo-1544352450-f06caad5f19f?w=300',    // Clean water image
+            'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=300'  // Education image
+        ];
+
+        document.querySelectorAll('.impact-card img').forEach((img, index) => {
+            img.src = impactStoryImages[index];
+            img.style.height = '200px';
+            img.style.objectFit = 'cover';
+        });
+    </script>
+
+    <!-- Add charts -->
+    <script>
+        // Donation Impact by Category Chart
+        const impactCtx = document.getElementById('impactChart').getContext('2d');
+        new Chart(impactCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Medical Aid', 'Food & Water', 'Shelter', 'Education', 'Infrastructure'],
+                datasets: [{
+                    data: [35, 25, 20, 15, 5],
+                    backgroundColor: [
+                        '#0d6efd',  // Primary
+                        '#198754',  // Success
+                        '#ffc107',  // Warning
+                        '#dc3545',  // Danger
+                        '#6c757d'   // Secondary
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Distribution of Aid by Category (%)'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.raw}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Geographic Distribution Chart
+        const geoCtx = document.getElementById('geographicChart').getContext('2d');
+        new Chart(geoCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Asia', 'Africa', 'Americas', 'Europe', 'Oceania'],
+                datasets: [
+                    {
+                        label: 'Number of Projects',
+                        data: [25, 20, 15, 10, 5],
+                        backgroundColor: '#0d6efd',
+                        order: 2
+                    },
+                    {
+                        label: 'People Impacted (thousands)',
+                        data: [12, 8, 6, 4, 2],
+                        type: 'line',
+                        borderColor: '#198754',
+                        borderWidth: 2,
+                        fill: false,
+                        order: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Regional Impact Distribution'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Projects'
+                        }
+                    },
+                    y1: {
+                        beginAtZero: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'People Impacted (thousands)'
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Add hover effects to impact cards
+        document.querySelectorAll('.impact-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px)';
+                this.style.boxShadow = '0 0.5rem 1rem rgba(0,0,0,0.15)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html> 
