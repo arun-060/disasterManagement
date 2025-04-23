@@ -13,8 +13,7 @@ public class PaymentController {
     private RazorpayService razorpayService;
 
     @PostMapping("/create-order")
-    public String createOrder(@RequestParam int amount , @RequestParam String currency){
-
+    public String createOrder(@RequestParam("amount") int amount, @RequestParam("currency") String currency) {
         try {
             return razorpayService.createOrder(amount, currency, "recepient_100");
         } catch (RazorpayException e) {

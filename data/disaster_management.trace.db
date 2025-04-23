@@ -225,3 +225,6 @@ Caused by: org.h2.jdbc.JdbcSQLInvalidAuthorizationSpecException: Wrong user name
 2025-03-24 22:26:59.011479+05:30 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]desc users"; expected "DELETE, DROP"; SQL statement:
 desc users [42001-232]
+2025-04-23 13:26:15.058684+05:30 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "[*]\\DONATIONS"; SQL statement:
+\DONATIONS [42000-232]
