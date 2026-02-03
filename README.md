@@ -11,6 +11,14 @@ This platform serves as a centralized system for disaster relief coordination, a
 - **Affected People** to request assistance
 - **Administrators** to manage the overall system
 
+## Recent Updates (July 2025)
+
+- Enhanced security configurations
+- Removed hardcoded API keys and secrets
+- Improved authentication and authorization
+- Updated volunteer dashboard with better task management
+- Added secure payment processing
+
 ## Features
 
 - **User Authentication**: Secure JWT-based authentication system
@@ -34,6 +42,23 @@ This platform serves as a centralized system for disaster relief coordination, a
 
 - Java 17 or higher
 - Gradle 8.12.1 or higher
+- Environment variables for sensitive data
+
+### Security Configuration
+
+1. Create the following environment variables:
+   ```
+   RAZORPAY_API_KEY=your_api_key_here
+   RAZORPAY_API_SECRET=your_api_secret_here
+   JWT_SECRET=your_jwt_secret_here
+   ```
+
+2. Update `application.properties`:
+   ```properties
+   razorpay.api.key=${RAZORPAY_API_KEY}
+   razorpay.api.secret=${RAZORPAY_API_SECRET}
+   app.jwt.secret=${JWT_SECRET}
+   ```
 
 ### Installation
 
@@ -113,6 +138,14 @@ src/main/resources/
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Security Notice
+
+- Never commit sensitive data (API keys, secrets, credentials)
+- Always use environment variables or secure vaults
+- Keep your environment variables secure
+- Regularly update dependencies
+- Monitor security advisories
 
 ## Acknowledgments
 
