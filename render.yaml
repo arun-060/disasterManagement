@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: disaster-management
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    port: 8080
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: JWT_SECRET
+        scope: project
+      - key: DB_PASSWORD
+        scope: project
+      - key: RAZORPAY_KEY_ID
+        scope: project
+      - key: RAZORPAY_KEY_SECRET
+        scope: project
+    healthCheckPath: /
+    autoDeploy: true

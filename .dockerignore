@@ -1,0 +1,16 @@
+.git
+.gitignore
+.gradle
+.idea
+.vscode
+bin
+build
+data
+node_modules
+*.log
+*.md
+.DS_Store
+*.class
+*.jar
+*.war
+*.ear
