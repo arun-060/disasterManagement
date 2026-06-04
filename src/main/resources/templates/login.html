@@ -209,9 +209,80 @@
                 padding: 24px;
             }
         }
+
+        .demo-credentials-box {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: linear-gradient(145deg, #ffffff, #eff6ff);
+            border: 1px solid #bfdbfe;
+            border-radius: 14px;
+            box-shadow: 0 16px 35px rgba(15, 23, 42, 0.18);
+            padding: 16px 18px;
+            max-width: 350px;
+            z-index: 9999;
+        }
+
+        .demo-credentials-box h4 {
+            color: var(--primary-color);
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            margin-top: 0;
+        }
+
+        .demo-credentials-box p {
+            font-size: 0.82rem;
+            color: #4a5568;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .demo-credentials-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 6px;
+        }
+
+        .demo-credentials-list li {
+            font-size: 0.85rem;
+            color: #2d3748;
+            background: #f7fafc;
+            border: 1px solid #edf2f7;
+            border-radius: 8px;
+            padding: 7px 9px;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .demo-credentials-list .role {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .demo-credentials-list .creds {
+            font-weight: 700;
+            color: #1a365d;
+            letter-spacing: 0.02em;
+        }
     </style>
 </head>
 <body>
+    <div class="demo-credentials-box">
+        <h4>Demo Accounts</h4>
+        <p>Use any of these to explore:</p>
+        <ul class="demo-credentials-list">
+            <li><span class="role">Admin</span><span class="creds">admin / admin123</span></li>
+            <li><span class="role">Donor</span><span class="creds">donor / donor123</span></li>
+            <li><span class="role">Volunteer</span><span class="creds">volunteer / volunteer123</span></li>
+            <li><span class="role">Affected</span><span class="creds">affected / affected123</span></li>
+        </ul>
+    </div>
+
     <div class="container login-container">
         <div class="card">
             <div class="card-banner">
