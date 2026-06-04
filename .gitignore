@@ -47,3 +47,4 @@ logs/
 .DS_Store
 Thumbs.db
 data/disaster_management.mv.db
+data/disaster_management.trace.db
