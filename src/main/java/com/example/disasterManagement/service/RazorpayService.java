@@ -10,17 +10,27 @@ import org.springframework.stereotype.Service;
 @Service
 public class RazorpayService {
 
-     @Value("${razorpay.api.key}")
-    private String apiKey ;
+    @Value("${razorpay.api.key:}")
+    private String apiKey;
 
-    @Value("${razorpay.api.secret}")
-    private String apiSecret ;
+    @Value("${razorpay.api.secret:}")
+    private String apiSecret;
 
-    public String createOrder(int amount , String currency , String receiptId) throws RazorpayException {
-        RazorpayClient razorpayClient = new RazorpayClient(apiKey,apiSecret);
-        JSONObject orderRequest  = new JSONObject();
-        orderRequest.put("amount", amount *100);
-        orderRequest.put("currency",currency);
+    /**
+     * Check if Razorpay is configured
+     */
+    public boolean isConfigured() {
+        return apiKey != null && !apiKey.isEmpty() && apiSecret != null && !apiSecret.isEmpty();
+    }
+
+    public String createOrder(int amount, String currency, String receiptId) throws RazorpayException {
+        if (!isConfigured()) {
+            throw new IllegalStateException("Razorpay API keys not configured. Payment processing is disabled.");
+        }
+        RazorpayClient razorpayClient = new RazorpayClient(apiKey, apiSecret);
+        JSONObject orderRequest = new JSONObject();
+        orderRequest.put("amount", amount * 100);
+        orderRequest.put("currency", currency);
         orderRequest.put("receipt", receiptId);
 
         Order order = razorpayClient.orders.create(orderRequest);
